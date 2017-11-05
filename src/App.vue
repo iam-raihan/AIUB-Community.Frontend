@@ -6,8 +6,8 @@
         <router-view></router-view>
       </v-content>
     </main>
-    <v-footer class="pa-2">
-      <div>© {{ new Date().getFullYear() }}</div>
+    <v-footer class="footer pa-2">
+      <code>>> Website under development stage. More features coming up!</code>
     </v-footer>
   </v-app>
 </template>
@@ -17,5 +17,8 @@
 </script>
 
 <style scoped>
-
+  .footer{
+    display: block;
+    text-align: center;
+  }
 </style>
