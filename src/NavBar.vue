@@ -3,7 +3,7 @@
     <v-navigation-drawer temporary v-model="sideNav" dark class="secondary">
       <v-list>
         <v-list-tile
-          v-if="loggedin"
+          v-if="!loggedin"
           @click.stop="sideNav = false, loginDialog = true">
           <v-list-tile-action>
             <v-icon>person</v-icon>
@@ -11,6 +11,7 @@
           <v-list-tile-content>LOG IN</v-list-tile-content>
         </v-list-tile>
         <v-list-tile
+        v-if="loggedin"
                 v-for="item in menuItems"
                 :key="item.title"
                 :to="item.link">
@@ -32,13 +33,14 @@
       <v-toolbar-items class="hidden-xs-only">
         <v-btn 
           flat
-          v-if="loggedin"        
+          v-if="!loggedin"        
           @click.stop="loginDialog = true">
           <v-icon left dark>person</v-icon>
           LOG IN
         </v-btn>
         <v-btn
                 flat
+                v-if="loggedin"
                 v-for="item in menuItems"
                 :key="item.title"
                 :to="item.link">
@@ -49,7 +51,8 @@
     </v-toolbar>
     <my-login
       :openDialog="loginDialog"
-      @closed="loginClosed($event)"></my-login>
+      @closed="dialogClosed($event)">
+    </my-login>
   </div>
 </template>
 
@@ -59,21 +62,22 @@
       return {
         sideNav: false,
         loginDialog: false,
-        loggedin: true
-      }
-    },
-    computed: {
-      menuItems () {
-        return [
-          {icon: 'person_add', title: 'REGISTER', link: '/register'},
+        registerDialog: false,
+        loggedin: false,
+        menuItems: [
           {icon: 'format_list_bulleted', title: 'MY SECTIONS', link: '/sections'},
           {icon: 'exit_to_app', title: 'LOG OUT', link: '/logout'}
         ]
       }
     },
+    computed: { },
     methods: {
-      loginClosed () {
-        this.loginDialog = false
+      dialogClosed (value) {
+        if (value === 'login') {
+          this.loginDialog = false
+        } else {
+          this.registerDialog = false
+        }
       }
     }
   }

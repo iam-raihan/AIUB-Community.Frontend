@@ -45,7 +45,7 @@
             </v-btn>
           </v-flex>
         </v-layout>
-      </v-flex>      
+      </v-flex>
     </v-layout>
 
     <lightbox
@@ -126,11 +126,11 @@
 <style scoped>
   .header-pic {
     display: inline-block;
-    max-width: 100%;  
+    max-width: 100%;
     vertical-align: middle;
   }
 
   h4, h5 {
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Open Sans", sans-serif;
   }
 </style>

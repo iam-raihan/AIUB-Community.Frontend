@@ -5,6 +5,7 @@ import './stylus/main.styl'
 
 import App from './App'
 import router from './router'
+import { store } from './store'
 import VueLazyLoad from 'vue-lazyload'
 import VueTouch from 'vue-touch'
 
@@ -27,5 +28,6 @@ Vue.component('my-login', LogIn)
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
