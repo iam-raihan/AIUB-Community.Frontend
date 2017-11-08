@@ -7,12 +7,12 @@
       <v-flex xs12 md6>
         <v-layout row>
           <v-flex xs12>
-          <h4>Tired of scheduling sections??</h4>
-          <h4>try, <b>Make My Schedule-AIUB</b></h4>
-          <h5>your best schedule is just a few clicks away..!</b></h5>
-        </v-flex>
+            <h4>Tired of scheduling sections??</h4>
+            <h4>try, <b>Make My Schedule-AIUB</b></h4>
+            <h5>your best schedule is just a few clicks away..!</b></h5>
+          </v-flex>
         </v-layout>
-        
+
         <v-layout row wrap>
           <v-flex xs12 sm6 text-sm-right>
             <v-btn outline round color="info" large>
@@ -36,7 +36,7 @@
               short Tutorial
             </v-btn>
           </v-flex>
-          
+
           <v-flex xs12 sm6 text-sm-left>
             <v-btn outline round color="accent" dark large
                href="https://www.youtube.com">
