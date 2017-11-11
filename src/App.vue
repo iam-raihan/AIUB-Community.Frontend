@@ -3,9 +3,12 @@
     <my-navbar></my-navbar>
     <main>
       <v-content>
-        <router-view></router-view>
+        <transition name="fade">
+          <router-view></router-view>
+        </transition>
+        <my-login></my-login>
       </v-content>
-    </main>
+    </main>    
     <v-footer class="footer pa-2">
       <code>>> Website under development stage. More features coming up!</code>
     </v-footer>
@@ -20,5 +23,15 @@
   .footer{
     display: block;
     text-align: center;
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition-property: opacity;
+    transition-duration: .25s;
+  }
+  .fade-enter-active {
+    transition-delay: .25s;
+  }
+  .fade-enter, .fade-leave-active {
+    opacity: 0
   }
 </style>

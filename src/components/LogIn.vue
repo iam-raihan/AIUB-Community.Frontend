@@ -6,7 +6,7 @@
           <v-card-title>
             <div>
               <div class="headline">Log In</div>
-              <span class="grey--text">Enter your AIUBCommunity credentials</span>
+              <span class="grey--text">Enter your AIUB Community credentials</span>
             </div>
           </v-card-title>
           <v-form v-model="form.valid" ref="form" @submit.prevent="onSignin">
@@ -16,7 +16,7 @@
                   <v-flex xs12>
                     <v-text-field
                       label="Enter ID"
-                      hint="xx-xxxxx-x"
+                      hint="XX-XXXXX-X"
                       v-model="form.id"
                       :rules="rules.id"
                       lazy-validation="true"
@@ -25,8 +25,8 @@
                   </v-flex>
                   <v-flex xs12>
                     <v-text-field
-                      label="Enter Password" 
-                      hint="do not enter VUES password"
+                      label="Enter Password"
+                      hint="Enter password of your AIUB Community account"
                       v-model="form.pass"
                       :rules="rules.pass"
                       lazy-validation="true"
@@ -67,20 +67,20 @@
     data () {
       return {
         form: {
-          id: '',
-          pass: '',
+          id: '15-29913-2',
+          pass: '16911691',
           valid: false
         },
         rules: {
           id: [
             (v) => !!v || 'ID is required',
-            (v) => (v.length === 10 && v[2] === '-' && v[8] === '-') || 'Invalid ID',
-            () => this.wrongCredentials.id
+            (v) => (v.length === 10 && v[2] === '-' && v[8] === '-') || v.length === 0 || 'Invalid VUES ID',
+            () => this.logInErrorMsgs.id
           ],
           pass: [
             (v) => !!v || 'Password is required',
-            (v) => v.length >= 8 || 'Password must be atleast 8 characters',
-            () => this.wrongCredentials.pass
+            (v) => v.length >= 8 || v.length === 0 || 'Password must be atleast 8 characters',
+            () => this.logInErrorMsgs.pass
           ]
         }
       }
@@ -99,19 +99,22 @@
       loading () {
         return this.$store.getters.getAxiosWorking
       },
-      wrongCredentials () {
-        return this.$store.getters.getWrongCredentials
+      logInErrorMsgs () {
+        return this.$store.getters.getLogInErrorMsgs
+      },
+      loggedIn () {
+        return this.$store.getters.getLoggedIn
       }
     },
     watch: {
       'form.id' () {
-        if (this.wrongCredentials.id !== true) {
-          this.$store.dispatch('changeWrongCredentials', 'id')
+        if (this.logInErrorMsgs.id !== true) {
+          this.$store.dispatch('changeLogInErrorMsgs', 'id')
         }
       },
       'form.pass' () {
-        if (this.wrongCredentials.pass !== true) {
-          this.$store.dispatch('changeWrongCredentials', 'pass')
+        if (this.logInErrorMsgs.pass !== true) {
+          this.$store.dispatch('changeLogInErrorMsgs', 'pass')
         }
       },
       loading () {

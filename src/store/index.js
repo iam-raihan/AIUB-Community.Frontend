@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 import axios from 'axios'
 
 Vue.use(Vuex)
 
-let backendSiteUrl = 'http://localhost:7000/api'
+axios.defaults.baseURL = 'http://localhost:7000/api'
 
 export const store = new Vuex.Store({
   state: {
@@ -14,11 +13,11 @@ export const store = new Vuex.Store({
       register: false
     },
     axiosWorking: false,
-    wrongCredentials: {
+    logInErrorMsgs: {
       id: true,
       pass: true
     },
-    loggedIn: !!localStorage.getItem('token')
+    user: JSON.parse(localStorage.getItem('data'))
   },
   mutations: {
     setOpenDialogs (state, payload) {
@@ -31,15 +30,15 @@ export const store = new Vuex.Store({
     setAxiosWorking (state, payload) {
       state.axiosWorking = payload
     },
-    setWrongCredentials (state, payload) {
-      if (payload.data === 'id') {
-        state.wrongCredentials.id = payload.value
+    setLogInErrorMsgs (state, payload) {
+      if (payload.field === 'id') {
+        state.logInErrorMsgs.id = payload.value
       } else {
-        state.wrongCredentials.pass = payload.value
+        state.logInErrorMsgs.pass = payload.value
       }
     },
-    setLoggedIn (state, payload) {
-      state.loggedIn = payload
+    setUser (state, payload) {
+      state.user = payload
     }
   },
   actions: {
@@ -48,30 +47,43 @@ export const store = new Vuex.Store({
     },
     signIn ({commit}, payload) {
       commit('setAxiosWorking', true)
-      axios.post(backendSiteUrl + '/check')
-        .then(
-          (response) => {
-            console.log(response)
-            localStorage.setItem('token', 'xyz')
-            // commit('setWrongCredentials', {'data': 'id', 'value': 'you are not registered'})
-            commit('setLoggedIn', true)
-            commit('setAxiosWorking', false)
-            commit('setOpenDialogs', {'dialog': 'logIn', 'open': false})
+      axios.post('/user/login',
+        {id: payload.id, pass: payload.pass}
+      ).then(
+        (response) => {
+          commit('setAxiosWorking', false)
+          localStorage.setItem('data', JSON.stringify(response.data))
+          commit('setUser', response.data)
+          commit('setOpenDialogs', {'dialog': 'logIn', 'open': false})
+        }
+      ).catch(
+        (error) => {
+          commit('setAxiosWorking', false)
+          switch (error.response.status) {
+            case 422:
+              commit('setLogInErrorMsgs', {'field': error.response.data.field, 'value': error.response.data.msg})
+              break
+            default:
+              commit('setLogInErrorMsgs', {'field': '', 'value': 'something went wrong :( try again'})
           }
-        )
-        .catch(
-          (error) => {
-            console.log(error)
-            commit('setAxiosWorking', false)
-          }
-        )
+        }
+      )
     },
-    signOut ({commit}, payload) {
-      commit('setLoggedIn', false)
-      localStorage.removeItem('token')
+    signOut ({commit}) {
+      commit('setUser', false)
+      localStorage.removeItem('data')
     },
-    changeWrongCredentials ({commit}, payload) {
-      commit('setWrongCredentials', {'data': payload, 'value': true})
+    changeLogInErrorMsgs ({commit}, payload) {
+      commit('setLogInErrorMsgs', {'field': payload, 'value': true})
+    },
+    refreshUserSections ({commit, state}) {
+      axios.post('/user/sections',
+        {header: {'Authorization': 'Bearer ' + state.user.token}}
+      ).then(
+        (response) => { console.log(response) }
+      ).catch(
+        (error) => { console.log(error) }
+      )
     }
   },
   getters: {
@@ -81,11 +93,14 @@ export const store = new Vuex.Store({
     getAxiosWorking (state) {
       return state.axiosWorking
     },
-    getWrongCredentials (state) {
-      return state.wrongCredentials
+    getLogInErrorMsgs (state) {
+      return state.logInErrorMsgs
     },
     getLoggedIn (state) {
-      return state.loggedIn
+      return !!state.user
+    },
+    getUserData (state) {
+      return state.user
     }
   }
 })

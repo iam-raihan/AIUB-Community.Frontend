@@ -8,17 +8,20 @@
             Your Saved Sections
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon class="primary--text">
+          <v-btn
+            icon
+            class="primary--text"
+            @click.native = "refreshUserSections()">
             <v-icon>cached</v-icon>
           </v-btn>
         </v-toolbar>
         <v-card>
           <v-expansion-panel popout focusable>
-            <v-expansion-panel-content v-for="(item, i) in 5" :key="i" lazy>
+            <v-expansion-panel-content v-for="(userSection, i) in userData.user.sections" :key="i" lazy>
               <div slot="header">
                 <v-badge>
-                  <span slot="badge">60</span>
-                  <span class="headline"><h5>Artificial Intelligence [A]</h5></span>
+                  <span slot="badge">{{ userSection.users.length }}</span>
+                  <span class="headline"><h6>{{ userSection.name }}</h6></span>
                 </v-badge>
               </div>
               <v-card>
@@ -26,14 +29,14 @@
                   <v-menu
                     offset-x
                     :close-on-content-click="false"
-                    v-for="i in 30" :key="i"
+                    v-for="(sectionUser, j) in userSection.users" :key="j"
                     lazy
                   >
                     <v-chip slot="activator" style="cursor: pointer">
                       <v-avatar class="teal">
                         <v-icon>account_circle</v-icon>
                       </v-avatar>
-                      Raihan Al-Mamun
+                      {{ sectionUser.name }}
                     </v-chip>
                     <v-card>
                       <v-list>
@@ -42,8 +45,8 @@
                             <v-icon class="teal--text">account_circle</v-icon>
                           </v-list-tile-avatar>
                           <v-list-tile-content>
-                            <v-list-tile-title>Raihan Al-Mamun</v-list-tile-title>
-                            <v-list-tile-sub-title>15-29913-2 [BScSE]</v-list-tile-sub-title>
+                            <v-list-tile-title>{{ sectionUser.name }}</v-list-tile-title>
+                            <v-list-tile-sub-title>{{ sectionUser.portalid }} [{{ sectionUser.dept }}]</v-list-tile-sub-title>
                           </v-list-tile-content>
                         </v-list-tile>
                       </v-list>
@@ -71,6 +74,16 @@
     data () {
       return {
         show: true
+      }
+    },
+    computed: {
+      userData () {
+        return this.$store.getters.getUserData
+      }
+    },
+    methods: {
+      refreshUserSections () {
+        this.$store.dispatch('refreshUserSections')
       }
     }
   }
