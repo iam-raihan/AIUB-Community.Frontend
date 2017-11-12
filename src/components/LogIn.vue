@@ -97,7 +97,7 @@
         }
       },
       loading () {
-        return this.$store.getters.getAxiosWorking
+        return this.$store.getters.getLoadings.axios
       },
       logInErrorMsgs () {
         return this.$store.getters.getLogInErrorMsgs
@@ -117,7 +117,7 @@
           this.$store.dispatch('changeLogInErrorMsgs', 'pass')
         }
       },
-      loading () {
+      'loading' () {
         this.$refs.form.validate()
       }
     },

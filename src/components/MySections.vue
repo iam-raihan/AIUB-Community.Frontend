@@ -5,34 +5,40 @@
         <v-toolbar>
           <v-toolbar-title>
             <v-icon>format_list_bulleted</v-icon>
-            Your Saved Sections
+            {{ userData.sections.length === 0 ? 'You Have No' : 'Your'}} Saved Sections
           </v-toolbar-title>
-          <v-spacer></v-spacer>
           <v-btn
             icon
-            class="primary--text"
-            @click.native = "refreshUserSections()">
-            <v-icon>cached</v-icon>
+            class="red--text"
+            style="cursor: pointer"
+            :loading="loadings.refreshUserSections"
+            @click.native = "onRefreshUserSections()">
+            <v-icon>refresh</v-icon>
           </v-btn>
         </v-toolbar>
         <v-card>
           <v-expansion-panel popout focusable>
-            <v-expansion-panel-content v-for="(userSection, i) in userData.user.sections" :key="i" lazy>
+            <v-expansion-panel-content v-for="(userSection, i) in userData.sections" :key="i" lazy>
               <div slot="header">
                 <v-badge>
                   <span slot="badge">{{ userSection.users.length }}</span>
-                  <span class="headline"><h6>{{ userSection.name }}</h6></span>
+                  <span class="headline"><h5>{{ userSection.name }}</h5></span>
                 </v-badge>
               </div>
               <v-card>
                 <v-card-text class="grey lighten-3">
+                  <center v-if="userSection.users.length === 1">No one else saved this section yet</center>
                   <v-menu
+                    v-else
                     offset-x
                     :close-on-content-click="false"
                     v-for="(sectionUser, j) in userSection.users" :key="j"
                     lazy
                   >
-                    <v-chip slot="activator" style="cursor: pointer">
+                    <v-chip
+                      slot="activator"
+                      style="cursor: pointer"
+                      v-if="sectionUser.portalid !== userData.portalid">
                       <v-avatar class="teal">
                         <v-icon>account_circle</v-icon>
                       </v-avatar>
@@ -48,13 +54,25 @@
                             <v-list-tile-title>{{ sectionUser.name }}</v-list-tile-title>
                             <v-list-tile-sub-title>{{ sectionUser.portalid }} [{{ sectionUser.dept }}]</v-list-tile-sub-title>
                           </v-list-tile-content>
+                          <v-card-actions>
+                            <v-btn
+                              icon
+                              class="red--text"
+                              style="cursor: pointer"
+                              :loading="loadings.axios"
+                              @click.native="onLoadSectionUser(sectionUser.portalid)">
+                              <v-icon>{{sectionUsers[sectionUser.portalid] !== undefined ? 'refresh' : 'format_list_bulleted'}}</v-icon>
+                            </v-btn>
+                          </v-card-actions>
                         </v-list-tile>
                       </v-list>
                       <v-divider></v-divider>
                       <v-list dense>
-                        <v-subheader>Saved Sections</v-subheader>
-                        <v-list-tile v-for="i in 5" :key="i">
-                          <v-list-tile-title>Physics 1 [A]</v-list-tile-title>
+                        <v-subheader v-if="sectionUsers[sectionUser.portalid] !== undefined">
+                          {{ sectionUsers[sectionUser.portalid].length === 0 ? 'No ' : '' }}Saved Sections
+                        </v-subheader>
+                        <v-list-tile v-for="(section, i) in sectionUsers[sectionUser.portalid]" :key="i">
+                          <v-list-tile-title>{{ section.name }}</v-list-tile-title>
                         </v-list-tile>
                       </v-list>
                     </v-card>
@@ -71,19 +89,23 @@
 
 <script>
   export default {
-    data () {
-      return {
-        show: true
-      }
-    },
     computed: {
+      loadings () {
+        return this.$store.getters.getLoadings
+      },
       userData () {
-        return this.$store.getters.getUserData
+        return this.$store.getters.getUserData.user
+      },
+      sectionUsers () {
+        return this.$store.getters.getSectionUsers || false
       }
     },
     methods: {
-      refreshUserSections () {
+      onRefreshUserSections () {
         this.$store.dispatch('refreshUserSections')
+      },
+      onLoadSectionUser (id) {
+        this.$store.dispatch('loadSectionUser', id)
       }
     }
   }
