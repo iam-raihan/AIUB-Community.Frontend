@@ -1,43 +1,13 @@
 <template>
   <div>
-    <v-navigation-drawer temporary v-model="sideNav" dark class="secondary">
-      <v-list>
-        <v-list-tile
-          v-if="!loggedIn"
-          @click.stop="sideNav = false, openDialogs('logIn')">
-          <v-list-tile-action>
-            <v-icon>person</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>SIGN IN</v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile
-          v-if="loggedIn"
-          @click.stop="sideNav = false"
-          to="/sections">
-          <v-list-tile-action>
-            <v-icon>format_list_bulleted</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>MY SECTIONS</v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile
-          v-if="loggedIn"
-          @click.stop="sideNav = false, logOut()">
-          <v-list-tile-action>
-            <v-icon>exit_to_app</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>SIGN OUT</v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
+    <!-- @@@@@@@@@@@@@@@@ toolbar @@@@@@@@@@@@@@@@ -->
     <v-toolbar dark class="primary">
       <v-toolbar-side-icon
-              @click.stop="sideNav = !sideNav"
-              class="hidden-sm-and-up "></v-toolbar-side-icon>
-      <v-toolbar-title>
+              @click.stop="sideBar = !sideBar">
+      </v-toolbar-side-icon>
+      <!-- <v-toolbar-title> -->
         <v-list class="primary" dark subheader>
-          <router-link to="/" tag="span" style="cursor: pointer">
+          <router-link :to="{name: 'home'}" tag="span" style="cursor: pointer">
             <v-list-tile >
               <v-list-tile-content>
                 <v-list-tile-title class="headline">AIUB COMMUNITY</v-list-tile-title>
@@ -46,7 +16,7 @@
             </v-list-tile>
           </router-link>
         </v-list>
-      </v-toolbar-title>
+      <!-- </v-toolbar-title> -->
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
         <v-btn 
@@ -56,24 +26,82 @@
           <v-icon left dark>person</v-icon>
           SIGN IN
         </v-btn>
-        
+
         <v-btn 
           flat
           v-if="loggedIn"        
-          to="/sections">
+          :to="{name: 'userSections'}">
           <v-icon left dark>format_list_bulleted</v-icon>
           MY SECTIONS
         </v-btn>
         
         <v-btn 
           flat
-          v-if="loggedIn"        
+          v-if="loggedIn"
           @click.stop="logOut()">
           <v-icon left dark>exit_to_app</v-icon>
           SIGN OUT
         </v-btn>
-      </v-toolbar-items>
+      </v-toolbar-items>    
     </v-toolbar>
+    <!-- @@@@@@@@@@@@@@@@ side bar @@@@@@@@@@@@@@@@ -->
+                <!-- add side bar here -->
+    <!-- @@@@@@@@@@@@@@@@ bottom sheet @@@@@@@@@@@@@@@@ -->
+    <v-btn
+      dark color="info"
+      fixed fab
+      bottom right
+      @click.stop="bottomSheet = !bottomSheet"
+      class="hidden-sm-and-up">
+      <v-icon>person</v-icon>
+    </v-btn>
+    <v-bottom-sheet v-model="bottomSheet">
+      <v-list dark class="secondary">
+        <v-list-tile avatar v-if="loggedIn">
+          <v-list-tile-avatar>
+            <v-icon large class="teal--text">account_circle</v-icon>
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ user.name }}</v-list-tile-title>
+            <v-list-tile-sub-title>
+              {{ user.portalid }} [{{ user.dept }}]
+            </v-list-tile-sub-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile v-else>
+          <v-list-tile-title>You are not logged in</v-list-tile-title>
+        </v-list-tile>
+        
+        <v-list-tile
+          v-if="!loggedIn"
+          @click.stop="bottomSheet = false, openDialogs('logIn')">
+          <v-list-tile-action>
+            <v-icon dark>person</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>SIGN IN</v-list-tile-content>
+        </v-list-tile>
+        
+        <v-list-tile
+          v-if="loggedIn"
+          @click.stop="bottomSheet = false"
+          :to="{name: 'userSections'}">
+          <v-list-tile-action>
+            <v-icon dark>format_list_bulleted</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>MY SECTIONS</v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile
+          v-if="loggedIn"
+          @click.stop="bottomSheet = false, logOut()">
+          <v-list-tile-action>
+            <v-icon dark>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>SIGN OUT</v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-bottom-sheet>
   </div>
 </template>
 
@@ -81,10 +109,14 @@
   export default {
     data () {
       return {
-        sideNav: false
+        bottomSheet: false,
+        sideBar: false
       }
     },
     computed: {
+      user () {
+        return this.$store.getters.getUserData.user
+      },
       loggedIn () {
         return this.$store.getters.getLoggedIn
       }
@@ -92,9 +124,9 @@
     watch: {
       loggedIn () {
         if (this.loggedIn) {
-          this.$router.push('/sections')
+          this.$router.push({name: 'userSections'})
         } else {
-          this.$router.push('/')
+          this.$router.push({name: 'home'})
         }
       }
     },

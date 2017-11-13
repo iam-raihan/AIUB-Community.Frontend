@@ -11,12 +11,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'home',
       component: Home
     },
     {
       path: '/sections',
-      name: 'MySections',
+      name: 'userSections',
       component: MySections,
       beforeEnter: (to, from, next) => {
         if (!store.getters.getLoggedIn) {
