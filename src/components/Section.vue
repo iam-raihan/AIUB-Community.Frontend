@@ -5,20 +5,21 @@
         <v-toolbar>
           <v-toolbar-title>
             <v-icon>format_list_bulleted</v-icon>
-            Compiler Design {{classid}}
+            {{ section.name }}
           </v-toolbar-title>
           <v-btn
             icon
             class="red--text"
             style="cursor: pointer"
             :loading="loadings.loadUserSections"
-            @click.native = "loadSectionUser('00123')">
+            @click.native = "loadSection(section.classid)">
             <v-icon>refresh</v-icon>
           </v-btn>
         </v-toolbar>
         <v-card>
           <v-card-text>
-            <center v-if="false">No one else saved this section yet</center>
+            <center v-if="false">No one saved this section yet</center>
+            <!-- @@@@@@@@@@@@@@@@ Loop for USERS _of_ Section @@@@@@@@@@@@@@@@ -->
             <v-menu
               v-else
               offset-x
@@ -49,20 +50,24 @@
                         icon
                         class="red--text"
                         style="cursor: pointer"
-                        @click.native="loadSectionUser('15-29913-2')">
-                        <v-icon>{{sectionUsers['15-29913-2'] !== undefined ? 'refresh' : 'format_list_bulleted'}}</v-icon>
+                        @click.native="loadUser('15-29913-2')">
+                        <v-icon>{{users['15-29913-2'] !== undefined ? 'refresh' : 'format_list_bulleted'}}</v-icon>
                       </v-btn>
                     </v-card-actions>
                   </v-list-tile>
                 </v-list>
                 <v-divider></v-divider>
                 <v-list dense>
-                  <v-subheader v-if="sectionUsers['15-29913-2'] !== undefined">
-                    {{ sectionUsers['15-29913-2'].length === 0 ? 'No ' : '' }}Saved Sections
+                  <v-subheader v-if="users['15-29913-2'] !== undefined">
+                    {{ users['15-29913-2'].length === 0 ? 'No ' : '' }}Saved Sections
                   </v-subheader>
-                  <v-list-tile v-for="(section, i) in sectionUsers['15-29913-2']" :key="i">
-                    <v-list-tile-title>{{ section.name }}</v-list-tile-title>
-                  </v-list-tile>
+                  <!-- @@@@@@@@@@@@@@@@ Loop for SECTIONS _of_ Section => User @@@@@@@@@@@@@@@@ -->
+                  <template v-for="section in users['15-29913-2']">
+                    <v-list-tile
+                      :to="{name: 'section', params: {classid: section.classid}}">
+                      <v-list-tile-title>{{ section.name }}</v-list-tile-title>
+                    </v-list-tile>
+                  </template>
                 </v-list>
               </v-card>
             </v-menu>
@@ -76,19 +81,32 @@
 <script>
   export default {
     computed: {
-      classid () {
-        return this.$route.params.classid
+      section () {
+        return this.$store.getters.getSections.find((section) => {
+          return section.classid === this.$route.params.classid
+        })
       },
       loadings () {
         return this.$store.getters.getLoadings
       },
-      sectionUsers () {
-        return this.$store.getters.getSectionUsers || false
+      users () {
+        return this.$store.getters.getUsers || false
+      }
+    },
+    watch: {
+      section () {
+        if (this.section.users === undefined) {
+          this.loadSection(this.section.classid)
+        }
       }
     },
     methods: {
-      loadSectionUser (id) {
-        this.$store.dispatch('loadSectionUser', id)
+      loadSection (classid) {
+        // this.$store.dispatch('loadSection', classid)
+        console.log('load section ' + classid)
+      },
+      loadUser (portalid) {
+        this.$store.dispatch('loadUser', portalid)
       }
     }
   }

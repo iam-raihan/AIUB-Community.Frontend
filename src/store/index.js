@@ -5,7 +5,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 axios.defaults.baseURL = 'http://localhost:7000/api'
-
+sessionStorage.removeItem('users')
 export const store = new Vuex.Store({
   state: {
     openDialogs: {
@@ -22,7 +22,7 @@ export const store = new Vuex.Store({
       pass: true
     },
     authUser: JSON.parse(localStorage.getItem('authUser')),
-    sectionUsers: JSON.parse(localStorage.getItem('sectionUsers')) || {},
+    users: JSON.parse(sessionStorage.getItem('users')) || {},
     sections: JSON.parse(sessionStorage.getItem('sections')) || []
   },
   mutations: {
@@ -64,9 +64,9 @@ export const store = new Vuex.Store({
       state.authUser.user.sections = payload
       localStorage.setItem('authUser', JSON.stringify(state.authUser))
     },
-    setSectionUsers (state, payload) {
-      state.sectionUsers = payload
-      localStorage.setItem('sectionUsers', JSON.stringify(payload))
+    addUser (state, payload) {
+      state.users[payload.id] = payload.data
+      sessionStorage.setItem('users', JSON.stringify(state.users))
     },
     setAllSections (state, payload) {
       state.sections = payload
@@ -122,7 +122,6 @@ export const store = new Vuex.Store({
     },
     signOut ({commit}) {
       commit('setAuthUser', false)
-      commit('setSectionUsers', {})
     },
     changeLogInErrorMsgs ({commit}, payload) {
       commit('setLogInErrorMsgs', {'field': payload, 'value': true})
@@ -142,15 +141,13 @@ export const store = new Vuex.Store({
         }
       )
     },
-    loadSectionUser ({commit, state}, payload) {
+    loadUser ({commit, state}, payload) {
       commit('setLoadings', {'item': 'axios', 'value': true})
       axios.post('/user/sections/' + payload + '/?token=' + state.authUser.token
       ).then(
         (response) => {
           commit('setLoadings', {'item': 'axios', 'value': false})
-          const sectionUsers = state.sectionUsers
-          sectionUsers[payload] = response.data.data
-          commit('setSectionUsers', sectionUsers)
+          commit('addUser', {'id': payload, 'data': response.data.data})
         }
       ).catch(
         (error) => {
@@ -176,8 +173,8 @@ export const store = new Vuex.Store({
     getAuthUser (state) {
       return state.authUser
     },
-    getSectionUsers (state) {
-      return state.sectionUsers
+    getUsers (state) {
+      return state.users
     },
     getSections (state) {
       return state.sections.sort((sectionA, sectionB) => {

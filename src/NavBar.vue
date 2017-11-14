@@ -21,7 +21,7 @@
       <v-toolbar-items class="hidden-xs-only">
         <v-btn 
           flat
-          v-if="!loggedIn"        
+          v-if="!loggedIn"
           @click.stop="openDialogs('logIn')">
           <v-icon left dark>person</v-icon>
           SIGN IN
@@ -30,7 +30,7 @@
         <v-btn 
           flat
           v-if="loggedIn"        
-          :to="{name: 'userSections'}">
+          :to="{name: 'mySections'}">
           <v-icon left dark>format_list_bulleted</v-icon>
           MY SECTIONS
         </v-btn>
@@ -72,7 +72,9 @@
       </v-toolbar>
       <v-list class="pt-0" dense style="cursor: pointer">
         <template v-for="(section, i) in sections">
-          <v-list-tile :to="'/section/'+section.classid" @click.stop="onSideBarListClick()">
+          <v-list-tile
+            :to="{name: 'section', params: {classid: section.classid}}"
+            @click.stop="onSideBarListClick()">
             <v-list-tile-content>
               <v-list-tile-title>{{ section.name }}</v-list-tile-title>
             </v-list-tile-content>
@@ -120,7 +122,7 @@
         <v-list-tile
           v-if="loggedIn"
           @click.stop="bottomSheet = false"
-          :to="{name: 'userSections'}">
+          :to="{name: 'mySections'}">
           <v-list-tile-action>
             <v-icon dark>format_list_bulleted</v-icon>
           </v-list-tile-action>
@@ -169,7 +171,7 @@
     watch: {
       loggedIn () {
         if (this.loggedIn) {
-          this.$router.push({name: 'userSections'})
+          this.$router.push({name: 'mySections'})
         } else {
           this.$router.push({name: 'home'})
         }

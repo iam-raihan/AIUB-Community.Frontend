@@ -17,7 +17,7 @@ export default new Router({
     },
     {
       path: '/sections',
-      name: 'userSections',
+      name: 'mySections',
       component: MySections,
       beforeEnter: (to, from, next) => {
         if (!store.getters.getLoggedIn) {
