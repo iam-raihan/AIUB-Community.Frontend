@@ -97,9 +97,9 @@
             <v-icon large class="teal--text">account_circle</v-icon>
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title>{{ user.name }}</v-list-tile-title>
+            <v-list-tile-title>{{ authUser.name }}</v-list-tile-title>
             <v-list-tile-sub-title>
-              {{ user.portalid }} [{{ user.dept }}]
+              {{ authUser.portalid }} [{{ authUser.dept }}]
             </v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -151,8 +151,8 @@
       }
     },
     computed: {
-      user () {
-        return this.$store.getters.getUserData.user
+      authUser () {
+        return this.$store.getters.getAuthUser.user
       },
       loggedIn () {
         return this.$store.getters.getLoggedIn

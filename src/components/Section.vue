@@ -12,7 +12,7 @@
             class="red--text"
             style="cursor: pointer"
             :loading="loadings.loadUserSections"
-            @click.native = "loadSectionData('00123')">
+            @click.native = "loadSectionUser('00123')">
             <v-icon>refresh</v-icon>
           </v-btn>
         </v-toolbar>

@@ -5,20 +5,20 @@
         <v-toolbar>
           <v-toolbar-title>
             <v-icon>format_list_bulleted</v-icon>
-            {{ userData.sections.length === 0 ? 'You Have No' : 'Your'}} Saved Sections
+            {{ authUser.sections.length === 0 ? 'You Have No' : 'Your'}} Saved Sections
           </v-toolbar-title>
           <v-btn
             icon
             class="red--text"
             style="cursor: pointer"
-            :loading="loadings.loadUserSections"
-            @click.native = "onLoadUserSections()">
+            :loading="loadings.loadAuthUserSections"
+            @click.native = "onLoadAuthUserSections()">
             <v-icon>refresh</v-icon>
           </v-btn>
         </v-toolbar>
         <v-card>
           <v-expansion-panel popout focusable>
-            <v-expansion-panel-content v-for="(userSection, i) in userData.sections" :key="i" lazy>
+            <v-expansion-panel-content v-for="(userSection, i) in authUser.sections" :key="i" lazy>
               <div slot="header">
                 <v-badge>
                   <span slot="badge">{{ userSection.users.length }}</span>
@@ -38,7 +38,7 @@
                     <v-chip
                       slot="activator"
                       style="cursor: pointer"
-                      v-if="sectionUser.portalid !== userData.portalid">
+                      v-if="sectionUser.portalid !== authUser.portalid">
                       <v-avatar class="teal">
                         <v-icon>account_circle</v-icon>
                       </v-avatar>
@@ -93,16 +93,16 @@
       loadings () {
         return this.$store.getters.getLoadings
       },
-      userData () {
-        return this.$store.getters.getUserData.user
+      authUser () {
+        return this.$store.getters.getAuthUser.user
       },
       sectionUsers () {
         return this.$store.getters.getSectionUsers || false
       }
     },
     methods: {
-      onLoadUserSections () {
-        this.$store.dispatch('loadUserSections')
+      onLoadAuthUserSections () {
+        this.$store.dispatch('loadAuthUserSections')
       },
       onLoadSectionUser (id) {
         this.$store.dispatch('loadSectionUser', id)

@@ -5,7 +5,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 axios.defaults.baseURL = 'http://localhost:7000/api'
-localStorage.removeItem('sectionUsers')
+
 export const store = new Vuex.Store({
   state: {
     openDialogs: {
@@ -14,14 +14,14 @@ export const store = new Vuex.Store({
     },
     loadings: {
       axios: false,
-      loadUserSections: false,
+      loadAuthUserSections: false,
       loadAllSections: false
     },
     logInErrorMsgs: {
       id: true,
       pass: true
     },
-    user: JSON.parse(localStorage.getItem('userData')),
+    authUser: JSON.parse(localStorage.getItem('authUser')),
     sectionUsers: JSON.parse(localStorage.getItem('sectionUsers')) || {},
     sections: JSON.parse(sessionStorage.getItem('sections')) || []
   },
@@ -38,8 +38,8 @@ export const store = new Vuex.Store({
         case 'axios':
           state.loadings.axios = payload.value
           break
-        case 'loadUserSections':
-          state.loadings.loadUserSections = payload.value
+        case 'loadAuthUserSections':
+          state.loadings.loadAuthUserSections = payload.value
           break
         case 'loadAllSections':
           state.loadings.loadAllSections = payload.value
@@ -52,17 +52,17 @@ export const store = new Vuex.Store({
         state.logInErrorMsgs.pass = payload.value
       }
     },
-    setUser (state, payload) {
-      state.user = payload
+    setAuthUser (state, payload) {
+      state.authUser = payload
       if (payload) {
-        localStorage.setItem('userData', JSON.stringify(payload))
+        localStorage.setItem('authUser', JSON.stringify(payload))
       } else {
-        localStorage.removeItem('userData')
+        localStorage.removeItem('authUser')
       }
     },
-    setUserSections (state, payload) {
-      state.user.user.sections = payload
-      localStorage.setItem('userData', JSON.stringify(state.user))
+    setAuthUserSections (state, payload) {
+      state.authUser.user.sections = payload
+      localStorage.setItem('authUser', JSON.stringify(state.authUser))
     },
     setSectionUsers (state, payload) {
       state.sectionUsers = payload
@@ -104,7 +104,7 @@ export const store = new Vuex.Store({
       ).then(
         (response) => {
           commit('setLoadings', {'item': 'axios', 'value': false})
-          commit('setUser', response.data)
+          commit('setAuthUser', response.data)
           commit('setOpenDialogs', {'dialog': 'logIn', 'open': false})
         }
       ).catch(
@@ -121,30 +121,30 @@ export const store = new Vuex.Store({
       )
     },
     signOut ({commit}) {
-      commit('setUser', false)
+      commit('setAuthUser', false)
       commit('setSectionUsers', {})
     },
     changeLogInErrorMsgs ({commit}, payload) {
       commit('setLogInErrorMsgs', {'field': payload, 'value': true})
     },
-    loadUserSections ({commit, state}) {
-      commit('setLoadings', {'item': 'loadUserSections', 'value': true})
-      axios.post('/user/sections?token=' + state.user.token
+    loadAuthUserSections ({commit, state}) {
+      commit('setLoadings', {'item': 'loadAuthUserSections', 'value': true})
+      axios.post('/user/sections?token=' + state.authUser.token
       ).then(
         (response) => {
-          commit('setLoadings', {'item': 'loadUserSections', 'value': false})
-          commit('setUserSections', response.data.data)
+          commit('setLoadings', {'item': 'loadAuthUserSections', 'value': false})
+          commit('setAuthUserSections', response.data.data)
         }
       ).catch(
         (error) => {
-          commit('setLoadings', {'item': 'loadUserSections', 'value': false})
+          commit('setLoadings', {'item': 'loadAuthUserSections', 'value': false})
           console.log(error)
         }
       )
     },
     loadSectionUser ({commit, state}, payload) {
       commit('setLoadings', {'item': 'axios', 'value': true})
-      axios.post('/user/sections/' + payload + '/?token=' + state.user.token
+      axios.post('/user/sections/' + payload + '/?token=' + state.authUser.token
       ).then(
         (response) => {
           commit('setLoadings', {'item': 'axios', 'value': false})
@@ -171,10 +171,10 @@ export const store = new Vuex.Store({
       return state.logInErrorMsgs
     },
     getLoggedIn (state) {
-      return !!state.user
+      return !!state.authUser
     },
-    getUserData (state) {
-      return state.user
+    getAuthUser (state) {
+      return state.authUser
     },
     getSectionUsers (state) {
       return state.sectionUsers
