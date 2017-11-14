@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- @@@@@@@@@@@@@@@@ toolbar @@@@@@@@@@@@@@@@ -->
-    <v-toolbar dark class="primary">
+    <v-toolbar dark class="primary" app fixed clipped-left>
       <v-toolbar-side-icon
-              @click.stop="sideBar = !sideBar">
+        @click.stop="sideBar = !sideBar">
       </v-toolbar-side-icon>
       <!-- <v-toolbar-title> -->
         <v-list class="primary" dark subheader>
@@ -42,16 +42,51 @@
           <v-icon left dark>exit_to_app</v-icon>
           SIGN OUT
         </v-btn>
-      </v-toolbar-items>    
+      </v-toolbar-items>
     </v-toolbar>
     <!-- @@@@@@@@@@@@@@@@ side bar @@@@@@@@@@@@@@@@ -->
-                <!-- add side bar here -->
+    <v-navigation-drawer
+      :temporary="!largeScreen"
+      app
+      clipped
+      disable-route-watcher
+      :mobile-break-point="1200"
+      dark class="secondary"
+      v-model="sideBar">
+      <v-toolbar class="transparent">
+        <v-text-field
+          class="pt-4"
+          label="Search Section"
+          single-line
+          dark
+          prepend-icon="search"
+          v-model="search">
+        </v-text-field>
+        <v-btn
+          dark
+          icon
+          :loading="loading"
+          @click="loadAllSections()">
+          <v-icon class="red--text">refresh</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-list class="pt-0" dense style="cursor: pointer">
+        <template v-for="(section, i) in sections">
+          <v-list-tile @click="showSection(section.classid)">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ section.name }}</v-list-tile-title>
+            </v-list-tile-content>
+            <v-divider></v-divider>
+          </v-list-tile>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
     <!-- @@@@@@@@@@@@@@@@ bottom sheet @@@@@@@@@@@@@@@@ -->
     <v-btn
       dark color="info"
       fixed fab
       bottom right
-      @click.stop="bottomSheet = !bottomSheet"
+      @click.stop="bottomSheet = !bottomSheet, sideBar = false"
       class="hidden-sm-and-up">
       <v-icon>person</v-icon>
     </v-btn>
@@ -70,7 +105,7 @@
         </v-list-tile>
 
         <v-list-tile v-else>
-          <v-list-tile-title>You are not logged in</v-list-tile-title>
+          <v-list-tile-title>You are not signed in</v-list-tile-title>
         </v-list-tile>
         
         <v-list-tile
@@ -109,8 +144,10 @@
   export default {
     data () {
       return {
+        search: '',
         bottomSheet: false,
-        sideBar: false
+        sideBar: this.largeScreen,
+        largeScreen: window.innerWidth > 1200
       }
     },
     computed: {
@@ -119,6 +156,14 @@
       },
       loggedIn () {
         return this.$store.getters.getLoggedIn
+      },
+      loading () {
+        return this.$store.getters.getLoadings.loadAllSections
+      },
+      sections () {
+        return this.$store.getters.getSections.filter((section) => {
+          return section.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        })
       }
     },
     watch: {
@@ -136,6 +181,19 @@
       },
       logOut () {
         this.$store.dispatch('signOut')
+      },
+      loadAllSections () {
+        this.$store.dispatch('loadAllSections')
+      },
+      showSection (classid) {
+        if (!this.largeScreen) {
+          this.sideBar = false
+        }
+        if (this.loggedIn) {
+          console.log('open section ' + classid)
+        } else {
+          this.openDialogs('logIn')
+        }
       }
     }
   }

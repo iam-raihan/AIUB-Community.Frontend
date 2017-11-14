@@ -11,8 +11,8 @@
             icon
             class="red--text"
             style="cursor: pointer"
-            :loading="loadings.refreshUserSections"
-            @click.native = "onRefreshUserSections()">
+            :loading="loadings.loadUserSections"
+            @click.native = "onLoadUserSections()">
             <v-icon>refresh</v-icon>
           </v-btn>
         </v-toolbar>
@@ -101,8 +101,8 @@
       }
     },
     methods: {
-      onRefreshUserSections () {
-        this.$store.dispatch('refreshUserSections')
+      onLoadUserSections () {
+        this.$store.dispatch('loadUserSections')
       },
       onLoadSectionUser (id) {
         this.$store.dispatch('loadSectionUser', id)

@@ -5,7 +5,7 @@
         <v-card>
           <v-card-title>
             <div>
-              <div class="headline">Log In</div>
+              <div class="headline">Sign In</div>
               <span class="grey--text">Enter your AIUB Community credentials</span>
             </div>
           </v-card-title>
@@ -19,7 +19,6 @@
                       hint="XX-XXXXX-X"
                       v-model="form.id"
                       :rules="rules.id"
-                      lazy-validation="true"
                       required>
                     </v-text-field>
                   </v-flex>
@@ -29,7 +28,6 @@
                       hint="Enter password of your AIUB Community account"
                       v-model="form.pass"
                       :rules="rules.pass"
-                      lazy-validation="true"
                       type="password"
                       required>
                     </v-text-field>
@@ -52,7 +50,7 @@
                 :disabled="!form.valid"
                 type="submit"
                 :loading="loading">
-                Log In
+                Sign In
               </v-btn>  
             </v-card-actions>
           </v-form>

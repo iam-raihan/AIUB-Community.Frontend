@@ -14,14 +14,16 @@ export const store = new Vuex.Store({
     },
     loadings: {
       axios: false,
-      refreshUserSections: false
+      loadUserSections: false,
+      loadAllSections: false
     },
     logInErrorMsgs: {
       id: true,
       pass: true
     },
     user: JSON.parse(localStorage.getItem('userData')),
-    sectionUsers: JSON.parse(localStorage.getItem('sectionUsers')) || {}
+    sectionUsers: JSON.parse(localStorage.getItem('sectionUsers')) || {},
+    sections: JSON.parse(sessionStorage.getItem('sections')) || []
   },
   mutations: {
     setOpenDialogs (state, payload) {
@@ -36,9 +38,11 @@ export const store = new Vuex.Store({
         case 'axios':
           state.loadings.axios = payload.value
           break
-        case 'refreshUserSections':
-          state.loadings.refreshUserSections = payload.value
+        case 'loadUserSections':
+          state.loadings.loadUserSections = payload.value
           break
+        case 'loadAllSections':
+          state.loadings.loadAllSections = payload.value
       }
     },
     setLogInErrorMsgs (state, payload) {
@@ -50,15 +54,46 @@ export const store = new Vuex.Store({
     },
     setUser (state, payload) {
       state.user = payload
+      if (payload) {
+        localStorage.setItem('userData', JSON.stringify(payload))
+      } else {
+        localStorage.removeItem('userData')
+      }
     },
-    refreshUserSections (state, payload) {
+    setUserSections (state, payload) {
       state.user.user.sections = payload
+      localStorage.setItem('userData', JSON.stringify(state.user))
     },
     setSectionUsers (state, payload) {
       state.sectionUsers = payload
+      localStorage.setItem('sectionUsers', JSON.stringify(payload))
+    },
+    setAllSections (state, payload) {
+      state.sections = payload
+      sessionStorage.setItem('sections', JSON.stringify(payload))
     }
   },
   actions: {
+    appLoaded ({dispatch, state}) {
+      if (state.sections.length === 0) {
+        dispatch('loadAllSections')
+      }
+    },
+    loadAllSections ({commit}) {
+      commit('setLoadings', {'item': 'loadAllSections', 'value': true})
+      axios.get('/sections'
+      ).then(
+        (response) => {
+          commit('setLoadings', {'item': 'loadAllSections', 'value': false})
+          commit('setAllSections', response.data.sections)
+        }
+      ).catch(
+        (error) => {
+          commit('setLoadings', {'item': 'loadAllSections', 'value': false})
+          console.log(error)
+        }
+      )
+    },
     openDialogs ({commit}, payload) {
       commit('setOpenDialogs', payload)
     },
@@ -69,7 +104,6 @@ export const store = new Vuex.Store({
       ).then(
         (response) => {
           commit('setLoadings', {'item': 'axios', 'value': false})
-          localStorage.setItem('userData', JSON.stringify(response.data))
           commit('setUser', response.data)
           commit('setOpenDialogs', {'dialog': 'logIn', 'open': false})
         }
@@ -89,24 +123,21 @@ export const store = new Vuex.Store({
     signOut ({commit}) {
       commit('setUser', false)
       commit('setSectionUsers', {})
-      localStorage.removeItem('userData')
-      localStorage.removeItem('sectionUsers')
     },
     changeLogInErrorMsgs ({commit}, payload) {
       commit('setLogInErrorMsgs', {'field': payload, 'value': true})
     },
-    refreshUserSections ({commit, state}) {
-      commit('setLoadings', {'item': 'refreshUserSections', 'value': true})
+    loadUserSections ({commit, state}) {
+      commit('setLoadings', {'item': 'loadUserSections', 'value': true})
       axios.post('/user/sections?token=' + state.user.token
       ).then(
         (response) => {
-          commit('setLoadings', {'item': 'refreshUserSections', 'value': false})
-          commit('refreshUserSections', response.data.data)
-          localStorage.setItem('userData', JSON.stringify(state.user))
+          commit('setLoadings', {'item': 'loadUserSections', 'value': false})
+          commit('setUserSections', response.data.data)
         }
       ).catch(
         (error) => {
-          commit('setLoadings', {'item': 'refreshUserSections', 'value': false})
+          commit('setLoadings', {'item': 'loadUserSections', 'value': false})
           console.log(error)
         }
       )
@@ -120,7 +151,6 @@ export const store = new Vuex.Store({
           const sectionUsers = state.sectionUsers
           sectionUsers[payload] = response.data.data
           commit('setSectionUsers', sectionUsers)
-          localStorage.setItem('sectionUsers', JSON.stringify(state.sectionUsers))
         }
       ).catch(
         (error) => {
@@ -148,6 +178,16 @@ export const store = new Vuex.Store({
     },
     getSectionUsers (state) {
       return state.sectionUsers
+    },
+    getSections (state) {
+      return state.sections.sort((sectionA, sectionB) => {
+        if (sectionA.name > sectionB.name) {
+          return 1
+        } else if (sectionA.name < sectionB.name) {
+          return -1
+        }
+        return 0
+      })
     }
   }
 })
