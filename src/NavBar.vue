@@ -66,13 +66,13 @@
           dark
           icon
           :loading="loading"
-          @click="loadAllSections()">
+          @click.stop="loadAllSections()">
           <v-icon class="red--text">refresh</v-icon>
         </v-btn>
       </v-toolbar>
       <v-list class="pt-0" dense style="cursor: pointer">
         <template v-for="(section, i) in sections">
-          <v-list-tile @click="showSection(section.classid)">
+          <v-list-tile :to="'/section/'+section.classid" @click.stop="onSideBarListClick()">
             <v-list-tile-content>
               <v-list-tile-title>{{ section.name }}</v-list-tile-title>
             </v-list-tile-content>
@@ -185,14 +185,9 @@
       loadAllSections () {
         this.$store.dispatch('loadAllSections')
       },
-      showSection (classid) {
+      onSideBarListClick () {
         if (!this.largeScreen) {
           this.sideBar = false
-        }
-        if (this.loggedIn) {
-          console.log('open section ' + classid)
-        } else {
-          this.openDialogs('logIn')
         }
       }
     }
