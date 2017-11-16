@@ -12,7 +12,7 @@
             class="red--text"
             style="cursor: pointer"
             :loading="loadings.loadAuthUserSections"
-            @click.native = "onLoadAuthUserSections()">
+            @click.native = "loadAuthUserSections()">
             <v-icon>refresh</v-icon>
           </v-btn>
         </v-toolbar>
@@ -30,59 +30,61 @@
                 <v-card-text class="grey lighten-3">
                   <center v-if="authUserSection.users.length === 1">No one else saved this section yet</center>
                   <!-- @@@@@@@@@@@@@@@@ Loop for USERS _of_ AuthUser => Section @@@@@@@@@@@@@@@@ -->
-                  <v-menu
-                    v-else
-                    offset-x
-                    :close-on-content-click="false"
-                    v-for="(user, j) in authUserSection.users" :key="j"
-                    lazy
-                  >
-                    <v-chip
-                      slot="activator"
-                      style="cursor: pointer"
-                      v-if="user.portalid !== authUser.portalid">
-                      <v-avatar class="teal">
-                        <v-icon>account_circle</v-icon>
-                      </v-avatar>
-                      {{ user.name }}
-                    </v-chip>
-                    <v-card>
-                      <v-list>
-                        <v-list-tile avatar>
-                          <v-list-tile-avatar>
-                            <v-icon class="teal--text">account_circle</v-icon>
-                          </v-list-tile-avatar>
-                          <v-list-tile-content>
-                            <v-list-tile-title>{{ user.name }}</v-list-tile-title>
-                            <v-list-tile-sub-title>{{ user.portalid }} [{{ user.dept }}]</v-list-tile-sub-title>
-                          </v-list-tile-content>
-                          <v-card-actions>
-                            <v-btn
-                              icon
-                              class="red--text"
-                              style="cursor: pointer"
-                              :loading="loadings.axios"
-                              @click.native="onLoadUser(user.portalid)">
-                              <v-icon>{{users[user.portalid] !== undefined ? 'refresh' : 'format_list_bulleted'}}</v-icon>
-                            </v-btn>
-                          </v-card-actions>
-                        </v-list-tile>
-                      </v-list>
-                      <v-divider></v-divider>
-                      <v-list dense>
-                        <v-subheader v-if="users[user.portalid] !== undefined">
-                          {{ users[user.portalid].length === 0 ? 'No ' : '' }}Saved Sections
-                        </v-subheader>
-                        <!-- @@@@@@@@@@@@@@@@ Loop for SECTIONS _of_ AuthUser => Section => User @@@@@@@@@@@@@@@@ -->
-                        <template v-for="section in users[user.portalid]">
-                          <v-list-tile
-                            :to="{name: 'section', params: {classid: section.classid}}">
-                            <v-list-tile-title>{{ section.name }}</v-list-tile-title>
+                  <template v-for="user in authUserSection.users">
+                    <v-menu
+                      offset-x
+                      :close-on-content-click="false"
+                      lazy
+                    >
+                      <v-chip
+                        slot="activator"
+                        style="cursor: pointer"
+                        v-if="user.portalid !== authUser.portalid">
+                        <v-avatar class="teal">
+                          <v-icon>account_circle</v-icon>
+                        </v-avatar>
+                        {{ user.name }}
+                      </v-chip>
+                      <v-card>
+                        <v-list>
+                          <v-list-tile avatar>
+                            <v-list-tile-avatar>
+                              <v-icon class="teal--text">account_circle</v-icon>
+                            </v-list-tile-avatar>
+                            <v-list-tile-content>
+                              <v-list-tile-title>{{ user.name }}</v-list-tile-title>
+                              <v-list-tile-sub-title>{{ user.portalid }} [{{ user.dept }}]</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                            <v-card-actions>
+                              <v-btn
+                                icon
+                                class="red--text"
+                                style="cursor: pointer"
+                                :loading="user.portalid in users ? users[user.portalid].loading : false"
+                                @click.native="loadUserData(user.portalid)">
+                                <v-icon>{{user.portalid in users ? 'format_list_bulleted' : 'refresh'}}</v-icon>
+                              </v-btn>
+                            </v-card-actions>
                           </v-list-tile>
+                        </v-list>
+                        <v-divider></v-divider>
+                        <template v-if="user.portalid in users && users[user.portalid].sections !== false">
+                          <v-list dense>
+                            <v-subheader>
+                              {{ users[user.portalid].sections.length === 0 ? 'No ' : '' }}Saved Sections
+                            </v-subheader>
+                            <!-- @@@@@@@@@@@@@@@@ Loop for SECTIONS _of_ AuthUser => Section => User @@@@@@@@@@@@@@@@ -->
+                            <template v-for="section in users[user.portalid].sections">
+                              <v-list-tile
+                                :to="{name: 'section', params: {classid: section.classid}}">
+                                <v-list-tile-title>{{ section.name }}</v-list-tile-title>
+                              </v-list-tile>
+                            </template>
+                          </v-list>
                         </template>
-                      </v-list>
-                    </v-card>
-                  </v-menu>
+                      </v-card>
+                    </v-menu>
+                  </template>
                 </v-card-text>
               </v-card>
             </v-expansion-panel-content>
@@ -100,18 +102,18 @@
         return this.$store.getters.getLoadings
       },
       authUser () {
-        return this.$store.getters.getAuthUser.user
+        return this.$store.getters.getAuthUser
       },
       users () {
-        return this.$store.getters.getUsers || false
+        return this.$store.getters.getUsers
       }
     },
     methods: {
-      onLoadAuthUserSections () {
+      loadAuthUserSections () {
         this.$store.dispatch('loadAuthUserSections')
       },
-      onLoadUser (id) {
-        this.$store.dispatch('loadUser', id)
+      loadUserData (portalid) {
+        this.$store.dispatch('loadUserData', portalid)
       }
     }
   }

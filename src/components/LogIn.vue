@@ -9,7 +9,7 @@
               <span class="grey--text">Enter your AIUB Community credentials</span>
             </div>
           </v-card-title>
-          <v-form v-model="form.valid" ref="form" @submit.prevent="onSignin">
+          <v-form v-model="form.valid" ref="form" @submit.prevent="signIn">
             <v-card-text>
               <v-container>
                 <v-layout wrap>
@@ -120,7 +120,7 @@
       }
     },
     methods: {
-      onSignin () {
+      signIn () {
         this.$store.dispatch('signIn', {
           'id': this.form.id,
           'pass': this.form.pass

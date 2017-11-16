@@ -21,7 +21,7 @@
       <v-toolbar-items class="hidden-xs-only">
         <v-btn 
           flat
-          v-if="!loggedIn"
+          v-if="!loggedIn"        
           @click.stop="openDialogs('logIn')">
           <v-icon left dark>person</v-icon>
           SIGN IN
@@ -71,10 +71,8 @@
         </v-btn>
       </v-toolbar>
       <v-list class="pt-0" dense style="cursor: pointer">
-        <template v-for="(section, i) in sections">
-          <v-list-tile
-            :to="{name: 'section', params: {classid: section.classid}}"
-            @click.stop="onSideBarListClick()">
+        <template v-for="(section, classid) in sections">
+          <v-list-tile :to="'/section/'+classid" @click.stop="onSideBarListClick()">
             <v-list-tile-content>
               <v-list-tile-title>{{ section.name }}</v-list-tile-title>
             </v-list-tile-content>
@@ -154,7 +152,7 @@
     },
     computed: {
       authUser () {
-        return this.$store.getters.getAuthUser.user
+        return this.$store.getters.getAuthUser
       },
       loggedIn () {
         return this.$store.getters.getLoggedIn
@@ -163,9 +161,13 @@
         return this.$store.getters.getLoadings.loadAllSections
       },
       sections () {
-        return this.$store.getters.getSections.filter((section) => {
-          return section.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        let filterdSection = {}
+        Object.entries(this.$store.getters.getSections).filter(section => {
+          return section[1].name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        }).forEach(([classid, section]) => {
+          filterdSection[classid] = section
         })
+        return filterdSection
       }
     },
     watch: {

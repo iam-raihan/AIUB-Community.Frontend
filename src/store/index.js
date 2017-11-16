@@ -5,7 +5,8 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 axios.defaults.baseURL = 'http://localhost:7000/api'
-sessionStorage.removeItem('users')
+localStorage.removeItem('usersData')
+localStorage.removeItem('sectionsData')
 export const store = new Vuex.Store({
   state: {
     openDialogs: {
@@ -22,8 +23,8 @@ export const store = new Vuex.Store({
       pass: true
     },
     authUser: JSON.parse(localStorage.getItem('authUser')),
-    users: JSON.parse(sessionStorage.getItem('users')) || {},
-    sections: JSON.parse(sessionStorage.getItem('sections')) || []
+    usersData: JSON.parse(localStorage.getItem('usersData')) || {},
+    sectionsData: JSON.parse(localStorage.getItem('sectionsData')) || {}
   },
   mutations: {
     setOpenDialogs (state, payload) {
@@ -43,6 +44,17 @@ export const store = new Vuex.Store({
           break
         case 'loadAllSections':
           state.loadings.loadAllSections = payload.value
+          break
+        case 'section':
+          state.sectionsData[payload.classid].loading = payload.value
+          break
+        case 'user':
+          let sections = false
+          if (payload.portalid in state.usersData) {
+            sections = state.usersData[payload.portalid].sections
+          }
+          Vue.set(state.usersData, payload.portalid, { loading: payload.value, sections })
+          // Vue.set is used for reactivity according to vuejs list rendering documentation
       }
     },
     setLogInErrorMsgs (state, payload) {
@@ -64,18 +76,39 @@ export const store = new Vuex.Store({
       state.authUser.user.sections = payload
       localStorage.setItem('authUser', JSON.stringify(state.authUser))
     },
-    addUser (state, payload) {
-      state.users[payload.id] = payload.data
-      sessionStorage.setItem('users', JSON.stringify(state.users))
+    setUserData (state, payload) {
+      let user = {
+        loading: false,
+        sections: payload.data
+      }
+      Vue.set(state.usersData, payload.portalid, user)
+      localStorage.setItem('usersData', JSON.stringify(state.usersData))
     },
-    setAllSections (state, payload) {
-      state.sections = payload
-      sessionStorage.setItem('sections', JSON.stringify(payload))
+    setSectionData (state, payload) {
+      let section = {
+        name: payload.data.name,
+        loading: false,
+        users: payload.data.users
+      }
+      Vue.set(state.sectionsData, payload.classid, section)
+      localStorage.setItem('sectionsData', JSON.stringify(state.sectionsData))
+    },
+    setAllSectionsData (state, payload) {
+      let sections = {}
+      payload.forEach((section) => {
+        sections[section.classid] = {
+          name: section.name,
+          loading: false,
+          users: state.sectionsData[section.classid] ? state.sectionsData[section.classid].users : false
+        }
+      })
+      state.sectionsData = sections
+      localStorage.setItem('sectionsData', JSON.stringify(state.sectionsData))
     }
   },
   actions: {
     appLoaded ({dispatch, state}) {
-      if (state.sections.length === 0) {
+      if (Object.keys(state.sectionsData).length === 0) {
         dispatch('loadAllSections')
       }
     },
@@ -84,8 +117,9 @@ export const store = new Vuex.Store({
       axios.get('/sections'
       ).then(
         (response) => {
+          console.log(response.data)
           commit('setLoadings', {'item': 'loadAllSections', 'value': false})
-          commit('setAllSections', response.data.sections)
+          commit('setAllSectionsData', response.data.sections)
         }
       ).catch(
         (error) => {
@@ -103,6 +137,7 @@ export const store = new Vuex.Store({
         {id: payload.id, pass: payload.pass}
       ).then(
         (response) => {
+          console.log(response.data)
           commit('setLoadings', {'item': 'axios', 'value': false})
           commit('setAuthUser', response.data)
           commit('setOpenDialogs', {'dialog': 'logIn', 'open': false})
@@ -131,8 +166,9 @@ export const store = new Vuex.Store({
       axios.post('/user/sections?token=' + state.authUser.token
       ).then(
         (response) => {
+          console.log(response.data)
           commit('setLoadings', {'item': 'loadAuthUserSections', 'value': false})
-          commit('setAuthUserSections', response.data.data)
+          commit('setAuthUserSections', response.data.sections)
         }
       ).catch(
         (error) => {
@@ -141,17 +177,32 @@ export const store = new Vuex.Store({
         }
       )
     },
-    loadUser ({commit, state}, payload) {
-      commit('setLoadings', {'item': 'axios', 'value': true})
+    loadUserData ({commit, state}, payload) {
+      commit('setLoadings', {'item': 'user', 'portalid': payload, 'value': true})
       axios.post('/user/sections/' + payload + '/?token=' + state.authUser.token
       ).then(
         (response) => {
-          commit('setLoadings', {'item': 'axios', 'value': false})
-          commit('addUser', {'id': payload, 'data': response.data.data})
+          console.log(response.data)
+          commit('setUserData', {'portalid': payload, 'data': response.data.sections})
         }
       ).catch(
         (error) => {
-          commit('setLoadings', {'item': 'axios', 'value': false})
+          commit('setLoadings', {'item': 'user', 'portalid': payload, 'value': false})
+          console.log(error)
+        }
+      )
+    },
+    loadSectionData ({commit, state}, payload) {
+      commit('setLoadings', {'item': 'section', 'classid': payload, 'value': true})
+      axios.post('/section/users/' + payload + '/?token=' + state.authUser.token
+      ).then(
+        (response) => {
+          console.log(response.data)
+          commit('setSectionData', {'classid': payload, 'data': response.data.section})
+        }
+      ).catch(
+        (error) => {
+          commit('setLoadings', {'item': 'section', 'classid': payload, 'value': false})
           console.log(error)
         }
       )
@@ -171,20 +222,24 @@ export const store = new Vuex.Store({
       return !!state.authUser
     },
     getAuthUser (state) {
-      return state.authUser
+      return state.authUser.user
     },
     getUsers (state) {
-      return state.users
+      return state.usersData
     },
     getSections (state) {
-      return state.sections.sort((sectionA, sectionB) => {
-        if (sectionA.name > sectionB.name) {
+      let sortedSections = {}
+      Object.entries(state.sectionsData).sort((sectionA, sectionB) => {
+        if (sectionA[1].name > sectionB[1].name) {
           return 1
-        } else if (sectionA.name < sectionB.name) {
+        } else if (sectionA[1].name < sectionB[1].name) {
           return -1
         }
         return 0
+      }).forEach(([classid, section]) => {
+        sortedSections[classid] = section
       })
+      return sortedSections
     }
   }
 })
