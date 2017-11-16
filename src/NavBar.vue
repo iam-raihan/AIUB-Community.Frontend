@@ -38,7 +38,7 @@
         <v-btn 
           flat
           v-if="loggedIn"
-          @click.stop="logOut()">
+          @click.stop="signOut()">
           <v-icon left dark>exit_to_app</v-icon>
           SIGN OUT
         </v-btn>
@@ -76,7 +76,7 @@
             <v-list-tile-content>
               <v-list-tile-title>{{ section.name }}</v-list-tile-title>
             </v-list-tile-content>
-            <v-divider></v-divider>
+            <v-divider :class="{'info' : section.users !== false}"></v-divider>
           </v-list-tile>
         </template>
       </v-list>
@@ -129,7 +129,7 @@
 
         <v-list-tile
           v-if="loggedIn"
-          @click.stop="bottomSheet = false, logOut()">
+          @click.stop="bottomSheet = false, signOut()">
           <v-list-tile-action>
             <v-icon dark>exit_to_app</v-icon>
           </v-list-tile-action>
@@ -183,7 +183,7 @@
       openDialogs (value) {
         this.$store.dispatch('openDialogs', {'dialog': value, 'open': true})
       },
-      logOut () {
+      signOut () {
         this.$store.dispatch('signOut')
       },
       loadAllSections () {

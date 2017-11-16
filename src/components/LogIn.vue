@@ -9,7 +9,7 @@
               <span class="grey--text">Enter your AIUB Community credentials</span>
             </div>
           </v-card-title>
-          <v-form v-model="form.valid" ref="form" @submit.prevent="signIn">
+          <v-form v-model="form.valid" ref="form" @submit.prevent="signIn()">
             <v-card-text>
               <v-container>
                 <v-layout wrap>
@@ -49,7 +49,7 @@
                 flat
                 :disabled="!form.valid"
                 type="submit"
-                :loading="loading">
+                :loading="loadings.axios">
                 Sign In
               </v-btn>  
             </v-card-actions>
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   export default {
     data () {
       return {
@@ -94,15 +95,11 @@
           }
         }
       },
-      loading () {
-        return this.$store.getters.getLoadings.axios
-      },
-      logInErrorMsgs () {
-        return this.$store.getters.getLogInErrorMsgs
-      },
-      loggedIn () {
-        return this.$store.getters.getLoggedIn
-      }
+      ...mapGetters({
+        loadings: 'getLoadings',
+        logInErrorMsgs: 'getLogInErrorMsgs',
+        loggedIn: 'getLoggedIn'
+      })
     },
     watch: {
       'form.id' () {
@@ -115,7 +112,7 @@
           this.$store.dispatch('changeLogInErrorMsgs', 'pass')
         }
       },
-      'loading' () {
+      'loadings.axios' () {
         this.$refs.form.validate()
       }
     },

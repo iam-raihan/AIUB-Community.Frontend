@@ -222,7 +222,7 @@ export const store = new Vuex.Store({
       return !!state.authUser
     },
     getAuthUser (state) {
-      return state.authUser.user
+      return state.authUser ? state.authUser.user : false
     },
     getUsers (state) {
       return state.usersData

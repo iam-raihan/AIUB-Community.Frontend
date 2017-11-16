@@ -62,7 +62,7 @@
                                 style="cursor: pointer"
                                 :loading="user.portalid in users ? users[user.portalid].loading : false"
                                 @click.native="loadUserData(user.portalid)">
-                                <v-icon>{{user.portalid in users ? 'format_list_bulleted' : 'refresh'}}</v-icon>
+                                <v-icon>{{user.portalid in users ? 'refresh' : 'format_list_bulleted'}}</v-icon>
                               </v-btn>
                             </v-card-actions>
                           </v-list-tile>
@@ -96,25 +96,20 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex'
   export default {
     computed: {
-      loadings () {
-        return this.$store.getters.getLoadings
-      },
-      authUser () {
-        return this.$store.getters.getAuthUser
-      },
-      users () {
-        return this.$store.getters.getUsers
-      }
+      ...mapGetters({
+        loadings: 'getLoadings',
+        authUser: 'getAuthUser',
+        users: 'getUsers'
+      })
     },
     methods: {
-      loadAuthUserSections () {
-        this.$store.dispatch('loadAuthUserSections')
-      },
-      loadUserData (portalid) {
-        this.$store.dispatch('loadUserData', portalid)
-      }
+      ...mapActions([
+        'loadAuthUserSections',
+        'loadUserData'
+      ])
     }
   }
 </script>
