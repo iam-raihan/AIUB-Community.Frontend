@@ -74,7 +74,7 @@
         <template v-for="(section, classid) in sections">
           <v-list-tile :to="'/section/'+classid" @click.stop="onSideBarListClick()">
             <v-list-tile-content>
-              <v-list-tile-title>{{ section.name }}</v-list-tile-title>
+              {{ section.name }}
             </v-list-tile-content>
             <v-divider :class="{'info' : section.users !== false}"></v-divider>
           </v-list-tile>
