@@ -21,7 +21,7 @@ export default new Router({
       component: MySections,
       beforeEnter: (to, from, next) => {
         if (!store.getters.getLoggedIn) {
-          store.dispatch('openDialogs', {'dialog': 'logIn', 'open': true})
+          store.dispatch('openDialogs', {'dialog': 'signIn', 'open': true})
           next(from.path)
         } else {
           next()
@@ -34,7 +34,7 @@ export default new Router({
       component: Section,
       beforeEnter: (to, from, next) => {
         if (!store.getters.getLoggedIn) {
-          store.dispatch('openDialogs', {'dialog': 'logIn', 'open': true})
+          store.dispatch('openDialogs', {'dialog': 'signIn', 'open': true})
           next(from.path)
         } else {
           next()

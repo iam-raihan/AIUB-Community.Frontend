@@ -45,7 +45,7 @@
                 Close
               </v-btn>          
               <v-btn
-                color="blue darken-1"
+                color="info"
                 flat
                 :disabled="!form.valid"
                 type="submit"
@@ -74,12 +74,12 @@
           id: [
             (v) => !!v || 'ID is required',
             (v) => (v.length === 10 && v[2] === '-' && v[8] === '-') || v.length === 0 || 'Invalid VUES ID',
-            () => this.logInErrorMsgs.id
+            () => this.signInErrorMsgs.id
           ],
           pass: [
             (v) => !!v || 'Password is required',
             (v) => v.length >= 8 || v.length === 0 || 'Password must be atleast 8 characters',
-            () => this.logInErrorMsgs.pass
+            () => this.signInErrorMsgs.pass
           ]
         }
       }
@@ -87,29 +87,29 @@
     computed: {
       dialog: {
         get: function () {
-          return this.$store.getters.getOpenDialogs.logIn
+          return this.$store.getters.getOpenDialogs.signIn
         },
         set: function (value) {
           if (!value) {
-            this.$store.dispatch('openDialogs', {'dialog': 'logIn', 'open': false})
+            this.$store.dispatch('openDialogs', {'dialog': 'signIn', 'open': false})
           }
         }
       },
       ...mapGetters({
         loadings: 'getLoadings',
-        logInErrorMsgs: 'getLogInErrorMsgs',
+        signInErrorMsgs: 'getSignInErrorMsgs',
         loggedIn: 'getLoggedIn'
       })
     },
     watch: {
       'form.id' () {
-        if (this.logInErrorMsgs.id !== true) {
-          this.$store.dispatch('changeLogInErrorMsgs', 'id')
+        if (this.signInErrorMsgs.id !== true) {
+          this.$store.dispatch('changeSignInErrorMsgs', 'id')
         }
       },
       'form.pass' () {
-        if (this.logInErrorMsgs.pass !== true) {
-          this.$store.dispatch('changeLogInErrorMsgs', 'pass')
+        if (this.signInErrorMsgs.pass !== true) {
+          this.$store.dispatch('changeSignInErrorMsgs', 'pass')
         }
       },
       'loadings.axios' () {

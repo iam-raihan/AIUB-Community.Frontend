@@ -8,9 +8,6 @@ import { store } from './store'
 import VueLazyLoad from 'vue-lazyload'
 import VueTouch from 'vue-touch'
 
-import NavBar from './NavBar.vue'
-import LogIn from '@/components/LogIn'
-
 Vue.use(Vuetify)
 Vue.use(VueLazyLoad, {
   loading: '/static/loading.gif',
@@ -19,9 +16,6 @@ Vue.use(VueLazyLoad, {
 Vue.use(VueTouch, { name: 'v-touch' })
 
 Vue.config.productionTip = false
-
-Vue.component('my-navbar', NavBar)
-Vue.component('my-login', LogIn)
 
 /* eslint-disable no-new */
 new Vue({

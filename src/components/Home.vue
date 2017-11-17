@@ -15,7 +15,8 @@
 
         <v-layout row wrap>
           <v-flex xs12 sm6 text-sm-right>
-            <v-btn outline round color="info" large>
+            <v-btn outline round color="info" large
+              @click="openDialog()">
               <v-icon left>file_download</v-icon>
               Download v1.0&nbsp;
             </v-btn>
@@ -30,16 +31,22 @@
           </v-flex>
 
           <v-flex xs12 sm6 text-sm-right>
-            <v-btn outline round color="accent" dark large
-               href="https://www.youtube.com">
+            <v-btn
+              outline round large
+              color="accent" dark
+              target="_blank"
+              href="https://www.youtube.com">
               <v-icon left>video_library</v-icon>
               short Tutorial
             </v-btn>
           </v-flex>
 
           <v-flex xs12 sm6 text-sm-left>
-            <v-btn outline round color="accent" dark large
-               href="https://www.youtube.com">
+            <v-btn
+              outline round large
+              color="accent" dark
+              target="_blank"
+              href="https://www.youtube.com">
               <v-icon left>video_library</v-icon>
               full Tutorial&nbsp;&nbsp;
             </v-btn>
@@ -116,6 +123,9 @@
       Lightbox
     },
     methods: {
+      openDialog () {
+        this.$store.dispatch('openDialogs', {'dialog': 'download', 'open': true})
+      },
       openGallery () {
         this.$refs.lightbox.showImage(0)
       }

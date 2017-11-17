@@ -10,15 +10,16 @@ localStorage.removeItem('sectionsData')
 export const store = new Vuex.Store({
   state: {
     openDialogs: {
-      logIn: false,
-      register: false
+      signIn: false,
+      signUp: false,
+      download: false
     },
     loadings: {
       axios: false,
       loadAuthUserSections: false,
       loadAllSections: false
     },
-    logInErrorMsgs: {
+    signInErrorMsgs: {
       id: true,
       pass: true
     },
@@ -28,10 +29,12 @@ export const store = new Vuex.Store({
   },
   mutations: {
     setOpenDialogs (state, payload) {
-      if (payload.dialog === 'logIn') {
-        state.openDialogs.logIn = payload.open
+      if (payload.dialog === 'signIn') {
+        state.openDialogs.signIn = payload.open
+      } else if (payload.dialog === 'signUp') {
+        state.openDialogs.signUp = payload.open
       } else {
-        state.openDialogs.register = payload.open
+        state.openDialogs.download = payload.open
       }
     },
     setLoadings (state, payload) {
@@ -57,11 +60,11 @@ export const store = new Vuex.Store({
           // Vue.set is used for reactivity according to vuejs list rendering documentation
       }
     },
-    setLogInErrorMsgs (state, payload) {
+    setSignInErrorMsgs (state, payload) {
       if (payload.field === 'id') {
-        state.logInErrorMsgs.id = payload.value
+        state.signInErrorMsgs.id = payload.value
       } else {
-        state.logInErrorMsgs.pass = payload.value
+        state.signInErrorMsgs.pass = payload.value
       }
     },
     setAuthUser (state, payload) {
@@ -133,24 +136,24 @@ export const store = new Vuex.Store({
     },
     signIn ({commit}, payload) {
       commit('setLoadings', {'item': 'axios', 'value': true})
-      axios.post('/user/login',
+      axios.post('/user/signin',
         {id: payload.id, pass: payload.pass}
       ).then(
         (response) => {
           console.log(response.data)
           commit('setLoadings', {'item': 'axios', 'value': false})
           commit('setAuthUser', response.data)
-          commit('setOpenDialogs', {'dialog': 'logIn', 'open': false})
+          commit('setOpenDialogs', {'dialog': 'signIn', 'open': false})
         }
       ).catch(
         (error) => {
           commit('setLoadings', {'item': 'axios', 'value': false})
           switch (error.response.status) {
             case 422:
-              commit('setLogInErrorMsgs', {'field': error.response.data.field, 'value': error.response.data.msg})
+              commit('setSignInErrorMsgs', {'field': error.response.data.field, 'value': error.response.data.msg})
               break
             default:
-              commit('setLogInErrorMsgs', {'field': '', 'value': 'something went wrong :( try again'})
+              commit('setSignInErrorMsgs', {'field': '', 'value': 'something went wrong :( try again'})
           }
         }
       )
@@ -158,8 +161,8 @@ export const store = new Vuex.Store({
     signOut ({commit}) {
       commit('setAuthUser', false)
     },
-    changeLogInErrorMsgs ({commit}, payload) {
-      commit('setLogInErrorMsgs', {'field': payload, 'value': true})
+    changeSignInErrorMsgs ({commit}, payload) {
+      commit('setSignInErrorMsgs', {'field': payload, 'value': true})
     },
     loadAuthUserSections ({commit, state}) {
       commit('setLoadings', {'item': 'loadAuthUserSections', 'value': true})
@@ -215,8 +218,8 @@ export const store = new Vuex.Store({
     getLoadings (state) {
       return state.loadings
     },
-    getLogInErrorMsgs (state) {
-      return state.logInErrorMsgs
+    getSignInErrorMsgs (state) {
+      return state.signInErrorMsgs
     },
     getLoggedIn (state) {
       return !!state.authUser

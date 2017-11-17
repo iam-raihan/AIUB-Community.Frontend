@@ -22,9 +22,17 @@
         <v-btn 
           flat
           v-if="!loggedIn"        
-          @click.stop="openDialogs('logIn')">
+          @click.stop="openDialogs('signIn')">
           <v-icon left dark>person</v-icon>
           SIGN IN
+        </v-btn>
+
+        <v-btn 
+          flat
+          v-if="!loggedIn"        
+          @click.stop="openDialogs('signUp')">
+          <v-icon left dark>person_add</v-icon>
+          SIGN UP
         </v-btn>
 
         <v-btn 
@@ -66,8 +74,8 @@
           dark
           icon
           :loading="loading"
-          @click.stop="loadAllSections()">
-          <v-icon class="red--text">refresh</v-icon>
+          @click.stop="onSideBarBtnClick()">
+          <v-icon class="red--text">{{search.length === 0 ? 'refresh' : 'close'}}</v-icon>
         </v-btn>
       </v-toolbar>
       <v-list class="pt-0" dense style="cursor: pointer">
@@ -110,11 +118,20 @@
         
         <v-list-tile
           v-if="!loggedIn"
-          @click.stop="bottomSheet = false, openDialogs('logIn')">
+          @click.stop="bottomSheet = false, openDialogs('signIn')">
           <v-list-tile-action>
             <v-icon dark>person</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>SIGN IN</v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile
+          v-if="!loggedIn"
+          @click.stop="bottomSheet = false, openDialogs('signUp')">
+          <v-list-tile-action>
+            <v-icon dark>person_add</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>SIGN UP</v-list-tile-content>
         </v-list-tile>
         
         <v-list-tile
@@ -186,8 +203,12 @@
       signOut () {
         this.$store.dispatch('signOut')
       },
-      loadAllSections () {
-        this.$store.dispatch('loadAllSections')
+      onSideBarBtnClick () {
+        if (this.search.length === 0) {
+          this.$store.dispatch('loadAllSections')
+        } else {
+          this.search = ''
+        }
       },
       onSideBarListClick () {
         if (!this.largeScreen) {
