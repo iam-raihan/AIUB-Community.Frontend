@@ -12,7 +12,8 @@ export const store = new Vuex.Store({
     openDialogs: {
       signIn: false,
       signUp: false,
-      download: false
+      download: false,
+      lightBox: false
     },
     loadings: {
       axios: false,
@@ -29,12 +30,18 @@ export const store = new Vuex.Store({
   },
   mutations: {
     setOpenDialogs (state, payload) {
-      if (payload.dialog === 'signIn') {
-        state.openDialogs.signIn = payload.open
-      } else if (payload.dialog === 'signUp') {
-        state.openDialogs.signUp = payload.open
-      } else {
-        state.openDialogs.download = payload.open
+      switch (payload.dialog) {
+        case 'signIn':
+          state.openDialogs.signIn = payload.open
+          break
+        case 'signUp':
+          state.openDialogs.signUp = payload.open
+          break
+        case 'download':
+          state.openDialogs.download = payload.open
+          break
+        case 'lightBox':
+          state.openDialogs.lightBox = payload.open
       }
     },
     setLoadings (state, payload) {

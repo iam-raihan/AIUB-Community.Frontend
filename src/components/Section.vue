@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import UserChips from './HelperComponents/UserChips'
+  import UserChips from './helpers/UserChips'
   export default {
     components: {
       'userChips': UserChips

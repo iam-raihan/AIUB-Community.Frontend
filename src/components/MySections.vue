@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import UserChips from './HelperComponents/UserChips'
+  import UserChips from './helpers/UserChips'
   import { mapGetters, mapActions } from 'vuex'
   export default {
     components: {

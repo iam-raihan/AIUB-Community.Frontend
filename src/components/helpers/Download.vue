@@ -5,14 +5,14 @@
         <v-card>
           <v-card-title>
             <div>
-              <div class="headline">Download v1.0<small>beta</small></div>
+              <div class="headline">Download <small>v1.0(beta)</small></div>
               <span class="grey--text">Download instruction for Make My Schedule-AIUB</span>
             </div>
           </v-card-title>
           <v-card-text>
             <div>
               <div class="headline primary--text">Installer</div>
-              <div>If you want to use Make My Scheduling-AIUB in your personal computer then click on INSTALLER.</div>
+              <div>If you want to use Make My Scheduling-AIUB on your personal computer then click on INSTALLER.</div>
             </div>
             <v-divider  class="mt-3"></v-divider>
             <div class="mt-3">

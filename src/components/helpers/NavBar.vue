@@ -168,6 +168,9 @@
       }
     },
     computed: {
+      lightBoxOn () {
+        return this.$store.getters.getOpenDialogs.lightBox
+      },
       authUser () {
         return this.$store.getters.getAuthUser
       },
@@ -193,6 +196,12 @@
           this.$router.push({name: 'mySections'})
         } else {
           this.$router.push({name: 'home'})
+        }
+      },
+      lightBoxOn () {
+        if (this.lightBoxOn) {
+          this.sideBar = false
+          this.$store.dispatch('openDialogs', {'dialog': 'lightBox', 'open': false})
         }
       }
     },
