@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container ref="container" style="min-height:100vh">
     <v-layout row>
       <v-flex xs12>
         <v-toolbar v-if="!section">
@@ -8,31 +8,42 @@
           </v-toolbar-title>
         </v-toolbar>
         <template v-else>
-          <v-toolbar>
-            <v-toolbar-title>
-              <v-icon v-if="mediumScreen">format_list_bulleted</v-icon>
-              {{ section.name }}
-            </v-toolbar-title>
-            <v-btn
-              icon
-              class="red--text"
-              style="cursor: pointer"
-              :loading="section.loading"
-              @click.native = "loadSectionData()">
-              <v-icon>refresh</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-card>
-            <v-card-text>
-              <center v-if="section.users.length === 0">No one saved this section yet</center>
-              <!-- @@@@@@@@@@@@@@@@ Loop for USERS _of_ Section @@@@@@@@@@@@@@@@ -->
-              <userChips
-                v-else
-                :sectionUsers="section.users"
-                :authUserPortalId="false">
-              </userChips>
-            </v-card-text>
-          </v-card>
+          <vueDataLoading
+            @pull-down="loadSectionData()"
+            :loading="section.loading"
+            :listens="['pull-down']"
+            :distance="100"
+            container="container">
+            <div slot="pull-down-before"><v-icon class="primary--text">arrow_downward</v-icon>&nbsp;&nbsp;pull to refresh</div>
+            <div slot="pull-down-ready"><v-icon class="primary--text">thumb_up</v-icon>&nbsp;&nbsp;ok ok..enough..!</div>
+            <div slot="pull-down-loading"><v-icon class="spinner"></v-icon></div>
+            <v-toolbar>
+              <v-toolbar-title>
+                <v-icon v-if="!mediumScreen">format_list_bulleted</v-icon>
+                {{ section.name }}
+              </v-toolbar-title>
+              <v-btn
+                icon
+                class="red--text"
+                style="cursor: pointer"
+                v-if="!mediumScreen"
+                :loading="section.loading"
+                @click.native = "loadSectionData()">
+                <v-icon>refresh</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card>
+              <v-card-text>
+                <center v-if="section.users.length === 0">No one saved this section yet</center>
+                <!-- @@@@@@@@@@@@@@@@ Loop for USERS _of_ Section @@@@@@@@@@@@@@@@ -->
+                <userChips
+                  v-else
+                  :sectionUsers="section.users"
+                  :authUserPortalId="false">
+                </userChips>
+              </v-card-text>
+            </v-card>
+          </vueDataLoading>
         </template>
       </v-flex>
     </v-layout>
@@ -40,14 +51,16 @@
 </template>
 
 <script>
-  import UserChips from './helpers/UserChips'
+  import vueDataLoading from 'vue-data-loading'
+  import userChips from './helpers/UserChips'
   export default {
     components: {
-      'userChips': UserChips
+      userChips,
+      vueDataLoading
     },
     data () {
       return {
-        mediumScreen: window.innerWidth > 800
+        mediumScreen: window.innerWidth < 960
       }
     },
     computed: {
@@ -70,3 +83,24 @@
     }
   }
 </script>
+
+<style scoped>
+  @keyframes spinner {
+    to {transform: rotate(360deg);}
+  }
+  .spinner:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: rgb(19, 107, 205);
+    animation: spinner .6s linear infinite;
+  }
+</style>

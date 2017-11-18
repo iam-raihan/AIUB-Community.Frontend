@@ -18,16 +18,16 @@
 </template>
 
 <script>
-  import NavBar from '@/components/helpers/NavBar'
-  import Download from '@/components/helpers/Download'
-  import SignIn from '@/components/helpers/SignIn'
-  import SignUp from '@/components/helpers/SignUp'
+  import navbar from '@/components/helpers/NavBar'
+  import download from '@/components/helpers/Download'
+  import signIn from '@/components/helpers/SignIn'
+  import signUp from '@/components/helpers/SignUp'
   export default {
     components: {
-      'navbar': NavBar,
-      'download': Download,
-      'signIn': SignIn,
-      'signUp': SignUp
+      navbar,
+      download,
+      signIn,
+      signUp
     }
   }
 </script>
