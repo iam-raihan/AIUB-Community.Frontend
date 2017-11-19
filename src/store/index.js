@@ -5,8 +5,23 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 axios.defaults.baseURL = 'http://localhost:7000/api'
-localStorage.removeItem('usersData')
-localStorage.removeItem('sectionsData')
+
+// ##########
+// remove 1 hour old user + section data stored in localstorage
+let dataStoringFrom = Date.parse(localStorage.getItem('dataStoringFrom')) || false
+let isOldData = false
+if (dataStoringFrom) {
+  isOldData = (new Date() - dataStoringFrom) / 1000 > 60 * 60
+  if (isOldData) {
+    localStorage.removeItem('usersData')
+    localStorage.removeItem('sectionsData')
+    localStorage.setItem('dataStoringFrom', new Date().toString())
+  }
+} else {
+  localStorage.setItem('dataStoringFrom', new Date().toString())
+}
+// ##########
+
 export const store = new Vuex.Store({
   state: {
     openDialogs: {
@@ -24,7 +39,7 @@ export const store = new Vuex.Store({
       id: true,
       pass: true
     },
-    authUser: JSON.parse(localStorage.getItem('authUser')),
+    authUser: JSON.parse(localStorage.getItem('authUser') || sessionStorage.getItem('authUser')),
     usersData: JSON.parse(localStorage.getItem('usersData')) || {},
     sectionsData: JSON.parse(localStorage.getItem('sectionsData')) || {}
   },
@@ -75,16 +90,29 @@ export const store = new Vuex.Store({
       }
     },
     setAuthUser (state, payload) {
-      state.authUser = payload
       if (payload) {
-        localStorage.setItem('authUser', JSON.stringify(payload))
+        state.authUser = payload.data
+        state.authUser['remember'] = payload.remember
+        if (payload.remember) {
+          localStorage.setItem('authUser', JSON.stringify(state.authUser))
+        } else {
+          sessionStorage.setItem('authUser', JSON.stringify(state.authUser))
+        }
       } else {
+        state.authUser = false
         localStorage.removeItem('authUser')
+        sessionStorage.removeItem('authUser')
       }
     },
     setAuthUserSections (state, payload) {
-      state.authUser.user.sections = payload
-      localStorage.setItem('authUser', JSON.stringify(state.authUser))
+      if (state.authUser) {
+        state.authUser.user.sections = payload
+        if (state.authUser.remember) {
+          localStorage.setItem('authUser', JSON.stringify(state.authUser))
+        } else {
+          sessionStorage.setItem('authUser', JSON.stringify(state.authUser))
+        }
+      }
     },
     setUserData (state, payload) {
       let user = {
@@ -118,13 +146,16 @@ export const store = new Vuex.Store({
   },
   actions: {
     appLoaded ({dispatch, state}) {
+      if (state.authUser && isOldData) {
+        dispatch('loadAuthUserSections')
+      }
       if (Object.keys(state.sectionsData).length === 0) {
         dispatch('loadAllSections')
       }
     },
     loadAllSections ({commit}) {
       commit('setLoadings', {'item': 'loadAllSections', 'value': true})
-      axios.get('/sections'
+      axios.post('/sections'
       ).then(
         (response) => {
           console.log(response.data)
@@ -149,8 +180,16 @@ export const store = new Vuex.Store({
         (response) => {
           console.log(response.data)
           commit('setLoadings', {'item': 'axios', 'value': false})
-          commit('setAuthUser', response.data)
+          commit('setAuthUser', {'data': response.data, 'remember': payload.remember})
           commit('setOpenDialogs', {'dialog': 'signIn', 'open': false})
+          let sections = []
+          response.data.user.sections.forEach(section => {
+            sections.push({
+              'classid': section.classid,
+              'name': section.name
+            })
+          })
+          commit('setUserData', {'portalid': response.data.user.portalid, 'data': sections})
         }
       ).catch(
         (error) => {
@@ -165,15 +204,22 @@ export const store = new Vuex.Store({
         }
       )
     },
-    signOut ({commit}) {
+    signOut ({commit, state}) {
+      axios.post('/auth/user/signout' + '/?token=' + state.authUser.token
+      ).then((response) => { console.log(response.data) }
+      ).catch((error) => { console.log(error) })
       commit('setAuthUser', false)
+    },
+    setUnauthorized ({commit}) {
+      commit('setAuthUser', false)
+      commit('setOpenDialogs', {'dialog': 'signIn', 'open': true})
     },
     changeSignInErrorMsgs ({commit}, payload) {
       commit('setSignInErrorMsgs', {'field': payload, 'value': true})
     },
-    loadAuthUserSections ({commit, state}) {
+    loadAuthUserSections ({commit, state, dispatch}) {
       commit('setLoadings', {'item': 'loadAuthUserSections', 'value': true})
-      axios.post('/user/sections?token=' + state.authUser.token
+      axios.post('/auth/user/sections?token=' + state.authUser.token
       ).then(
         (response) => {
           console.log(response.data)
@@ -183,13 +229,16 @@ export const store = new Vuex.Store({
       ).catch(
         (error) => {
           commit('setLoadings', {'item': 'loadAuthUserSections', 'value': false})
+          if (error.response.status === 401) {
+            dispatch('setUnauthorized')
+          }
           console.log(error)
         }
       )
     },
-    loadUserData ({commit, state}, payload) {
+    loadUserData ({commit, state, dispatch}, payload) {
       commit('setLoadings', {'item': 'user', 'portalid': payload, 'value': true})
-      axios.post('/user/sections/' + payload + '/?token=' + state.authUser.token
+      axios.post('/auth/user/sections/' + payload + '/?token=' + state.authUser.token
       ).then(
         (response) => {
           console.log(response.data)
@@ -198,13 +247,16 @@ export const store = new Vuex.Store({
       ).catch(
         (error) => {
           commit('setLoadings', {'item': 'user', 'portalid': payload, 'value': false})
+          if (error.response.status === 401) {
+            dispatch('setUnauthorized')
+          }
           console.log(error)
         }
       )
     },
-    loadSectionData ({commit, state}, payload) {
+    loadSectionData ({commit, state, dispatch}, payload) {
       commit('setLoadings', {'item': 'section', 'classid': payload, 'value': true})
-      axios.post('/section/users/' + payload + '/?token=' + state.authUser.token
+      axios.post('/auth/section/users/' + payload + '/?token=' + state.authUser.token
       ).then(
         (response) => {
           console.log(response.data)
@@ -213,6 +265,9 @@ export const store = new Vuex.Store({
       ).catch(
         (error) => {
           commit('setLoadings', {'item': 'section', 'classid': payload, 'value': false})
+          if (error.response.status === 401) {
+            dispatch('setUnauthorized')
+          }
           console.log(error)
         }
       )

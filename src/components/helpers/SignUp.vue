@@ -15,7 +15,7 @@
             # Download "Make My Schedule" software<br/>
             # Log In with your VUES account credentials*<br/>
             # And then you will get Sign Up form there.<br/>
-            <small>*Please understand that we need to varify you are AIUBian.</small>
+            <small>*Please understand that you have to verify you are AIUBian and be sure that your VUES account password will be stored in no where on the planet.</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>

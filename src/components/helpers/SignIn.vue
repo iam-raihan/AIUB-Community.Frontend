@@ -31,7 +31,15 @@
                       type="password"
                       required>
                     </v-text-field>
-                  </v-flex>              
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-checkbox
+                      label="Remember Me"
+                      v-model="form.remember"
+                      color="#4CAF50"
+                      hide-details>
+                    </v-checkbox>
+                  </v-flex>
                 </v-layout>
               </v-container>
               <small>*indicates required field</small>
@@ -51,7 +59,7 @@
                 type="submit"
                 :loading="loadings.axios">
                 Sign In
-              </v-btn>  
+              </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -66,8 +74,9 @@
     data () {
       return {
         form: {
-          id: '15-29913-2',
-          pass: '16911691',
+          id: '',
+          pass: '',
+          remember: false,
           valid: false
         },
         rules: {
@@ -120,7 +129,8 @@
       signIn () {
         this.$store.dispatch('signIn', {
           'id': this.form.id,
-          'pass': this.form.pass
+          'pass': this.form.pass,
+          'remember': this.form.remember
         })
       }
     }

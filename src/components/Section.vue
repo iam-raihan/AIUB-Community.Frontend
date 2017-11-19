@@ -1,5 +1,5 @@
 <template>
-  <v-container ref="container" style="min-height:100vh">
+  <v-container ref="container" style="min-height:80vh">
     <v-layout row>
       <v-flex xs12>
         <v-toolbar v-if="!section">

@@ -15,7 +15,9 @@
 
         <v-layout row wrap>
           <v-flex xs12 sm6 text-sm-right>
-            <v-btn outline round color="info" large
+            <v-btn
+              outline round large
+              color="info"
               @click="openDialog()">
               <v-icon left>file_download</v-icon>
               Download v1.0&nbsp;
@@ -23,8 +25,10 @@
           </v-flex>
 
           <v-flex xs12 sm6 text-sm-left>
-            <v-btn outline round color="info" large
-              @click.native="openGallery()">
+            <v-btn
+              outline round large
+              color="info"
+              @click="openGallery()">
               <v-icon left>photo_library</v-icon>
               Screenshots&nbsp;&nbsp;&nbsp;
             </v-btn>
@@ -33,7 +37,7 @@
           <v-flex xs12 sm6 text-sm-right>
             <v-btn
               outline round large
-              color="accent" dark
+              color="accent"
               target="_blank"
               href="https://www.youtube.com">
               <v-icon left>video_library</v-icon>
@@ -44,7 +48,7 @@
           <v-flex xs12 sm6 text-sm-left>
             <v-btn              
               outline round large
-              color="accent" dark
+              color="accent"
               target="_blank"
               href="https://www.youtube.com">
               <v-icon left>video_library</v-icon>
