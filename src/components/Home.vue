@@ -63,6 +63,7 @@
       :images="images"
       ref="lightbox"
       show-caption
+      @lightBoxOn="lightBoxOn($event)"
       :showThumbs="!smallScreen"
       :showLightBox="false"
       :nThumbs="5"
@@ -133,8 +134,10 @@
         this.$store.dispatch('openDialogs', {'dialog': 'download', 'open': true})
       },
       openGallery () {
-        this.$store.dispatch('openDialogs', {'dialog': 'lightBox', 'open': true})
         this.$refs.lightbox.showImage(0)
+      },
+      lightBoxOn (value) {
+        this.$store.dispatch('openDialogs', {'dialog': 'lightBox', 'open': value})
       }
     }
   }

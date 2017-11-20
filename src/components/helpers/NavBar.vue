@@ -207,7 +207,8 @@
       lightBoxOn () {
         if (this.lightBoxOn) {
           this.sideBar = false
-          this.$store.dispatch('openDialogs', {'dialog': 'lightBox', 'open': false})
+        } else if (this.largeScreen) {
+          this.sideBar = true
         }
       }
     },

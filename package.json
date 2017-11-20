@@ -14,7 +14,7 @@
     "axios": "^0.17.0",
     "vue": "^2.4.2",
     "vue-data-loading": "^0.2.3",
-    "vue-image-lightbox": "^5.5.3",
+    "vue-image-lightbox": "github:iam-raihan/vue-image-lightbox",
     "vue-lazyload": "^1.1.4",
     "vue-pull-to": "^0.1.5",
     "vue-router": "^2.7.0",
