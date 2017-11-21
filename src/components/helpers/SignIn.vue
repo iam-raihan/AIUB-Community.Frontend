@@ -123,6 +123,12 @@
       },
       'loadings.axios' () {
         this.$refs.form.validate()
+      },
+      dialog (value) {
+        if (!value) {
+          this.form.id = ''
+          this.form.pass = ''
+        }
       }
     },
     methods: {

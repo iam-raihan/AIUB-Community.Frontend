@@ -42,14 +42,22 @@
           <v-icon left dark>format_list_bulleted</v-icon>
           MY SECTIONS
         </v-btn>
-        
-        <v-btn 
-          flat
-          v-if="loggedIn"
-          @click.stop="signOut()">
-          <v-icon left dark>exit_to_app</v-icon>
-          SIGN OUT
-        </v-btn>
+        <v-menu offset-y v-if="loggedIn">
+          <v-btn flat slot="activator">
+            <v-icon left dark>person</v-icon>
+            {{ authUser.name.split(' ')[0] }}
+            <v-icon dark>arrow_drop_down</v-icon>
+          </v-btn>
+          <v-list dark class="secondary">
+            <v-list-tile
+              @click="signOut()">
+              <v-list-tile-action>
+                <v-icon dark>exit_to_app</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>SIGN OUT</v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </v-toolbar-items>
     </v-toolbar>
     <!-- @@@@@@@@@@@@@@@@ side bar @@@@@@@@@@@@@@@@ -->

@@ -18,7 +18,7 @@
             <div class="mt-3">
               <div class="headline success--text">Portable</div>
               <div>
-                Just in case, you are reading this text on a monitor which has a peculiar name
+                Just in case, you are reading this text on a monitor which has a peculiar name like 'ODDUU'
                 and right now you don't care about your lab task because you have your pre/final registration
                 within next 10-15 minutes then download PORTABLE version.
               </div>
