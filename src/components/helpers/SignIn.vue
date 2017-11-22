@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" max-width="300px">
+      <v-dialog v-model="dialog" max-width="300px" @keydown.esc="dialog = false">
         <v-card>
           <v-card-title>
             <div>
@@ -26,9 +26,11 @@
                     <v-text-field
                       label="Enter Password"
                       hint="Enter password of your AIUB Community account"
+                      :append-icon="form.visible ? 'visibility' : 'visibility_off'"
+                      :append-icon-cb="() => (form.visible = !form.visible)"
                       v-model="form.pass"
                       :rules="rules.pass"
-                      type="password"
+                      :type="form.visible ? 'text' : 'password'"
                       required>
                     </v-text-field>
                   </v-flex>
@@ -77,7 +79,8 @@
           id: '',
           pass: '',
           remember: true,
-          valid: false
+          valid: false,
+          visible: false
         },
         rules: {
           id: [
@@ -133,11 +136,13 @@
     },
     methods: {
       signIn () {
-        this.$store.dispatch('signIn', {
-          'id': this.form.id,
-          'pass': this.form.pass,
-          'remember': this.form.remember
-        })
+        if (this.form.valid) {
+          this.$store.dispatch('signIn', {
+            'id': this.form.id,
+            'pass': this.form.pass,
+            'remember': this.form.remember
+          })
+        }
       }
     }
   }

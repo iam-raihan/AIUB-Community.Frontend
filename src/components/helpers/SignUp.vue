@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" max-width="350px">
+      <v-dialog v-model="dialog" max-width="350px" @keydown.esc="dialog = false">
         <v-card>
           <v-card-title>
             <div>
