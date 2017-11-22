@@ -18,10 +18,12 @@
             <v-btn
               outline round large
               color="info"
-              @click="openDialog()">
+              target="_blank"
+              href="https://www.google.com">
               <v-icon left>file_download</v-icon>
               Download v1.0&nbsp;
             </v-btn>
+            <!-- @click="openDialog()" -->
           </v-flex>
 
           <v-flex xs12 sm6 text-sm-left>
@@ -79,7 +81,7 @@
     {
       thumb: '/static/step1.png',
       src: '/static/step1.png',
-      caption: 'step1: some initial and boring checkings at the beginning'
+      caption: 'step1: some initial and boring checking at the beginning'
     },
     {
       thumb: '/static/step2.png',
@@ -109,7 +111,7 @@
     {
       thumb: '/static/step7.png',
       src: '/static/step7.png',
-      caption: 'step7: Finally, here\'s your best possible schedule with your selected sections. I hope that graphical presentation makes your schedule easy to understand.'
+      caption: 'step7: Finally, here\'s your best possible schedule among your selected sections. I hope that graphical presentation makes your schedule easy to understand.'
     },
     {
       thumb: '/static/step8.png',

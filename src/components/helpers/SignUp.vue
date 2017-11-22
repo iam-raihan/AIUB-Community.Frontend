@@ -28,9 +28,11 @@
             <v-btn
               color="info"
               flat
-              @click="openDialog()">
+              target="_blank"
+              href="https://www.google.com">
               Download
             </v-btn>
+            <!-- @click="openDialog()" -->
           </v-card-actions>
         </v-card>
       </v-dialog>

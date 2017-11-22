@@ -76,7 +76,7 @@
         form: {
           id: '',
           pass: '',
-          remember: false,
+          remember: true,
           valid: false
         },
         rules: {

@@ -205,7 +205,7 @@ export const store = new Vuex.Store({
       )
     },
     signOut ({commit, state}) {
-      axios.post('/auth/user/signout' + '/?token=' + state.authUser.token
+      axios.post('/auth/user/signout?token=' + state.authUser.token
       ).then((response) => { console.log(response.data) }
       ).catch((error) => { console.log(error) })
       commit('setAuthUser', false)
@@ -238,7 +238,7 @@ export const store = new Vuex.Store({
     },
     loadUserData ({commit, state, dispatch}, payload) {
       commit('setLoadings', {'item': 'user', 'portalid': payload, 'value': true})
-      axios.post('/auth/user/sections/' + payload + '/?token=' + state.authUser.token
+      axios.post('/auth/user/sections/' + payload + '?token=' + state.authUser.token
       ).then(
         (response) => {
           console.log(response.data)
@@ -256,7 +256,7 @@ export const store = new Vuex.Store({
     },
     loadSectionData ({commit, state, dispatch}, payload) {
       commit('setLoadings', {'item': 'section', 'classid': payload, 'value': true})
-      axios.post('/auth/section/users/' + payload + '/?token=' + state.authUser.token
+      axios.post('/auth/section/users/' + payload + '?token=' + state.authUser.token
       ).then(
         (response) => {
           console.log(response.data)
