@@ -66,9 +66,8 @@
       ref="lightbox"
       show-caption
       @lightBoxOn="lightBoxOn($event)"
-      :showThumbs="!smallScreen"
       :showLightBox="false"
-      :nThumbs="5"
+      :nThumbs="lightBoxThumbs"
     ></lightbox>
   </v-container>
 </template>
@@ -125,7 +124,7 @@
       return {
         images,
         headerPicSrc: '/static/header-pic.png',
-        smallScreen: window.innerWidth < 505
+        lightBoxThumbs: window.innerWidth < 350 ? 2 : window.innerWidth < 750 ? 3 : 5
       }
     },
     components: {
