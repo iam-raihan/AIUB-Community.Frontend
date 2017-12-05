@@ -80,7 +80,7 @@
     {
       thumb: '/static/step1.png',
       src: '/static/step1.png',
-      caption: 'step1: some initial and boring checking at the beginning'
+      caption: 'step1: Download > Install > Open "Make My Schedule Software" on your machine.'
     },
     {
       thumb: '/static/step2.png',

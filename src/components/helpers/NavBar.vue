@@ -45,7 +45,7 @@
         <v-menu offset-y v-if="loggedIn">
           <v-btn flat slot="activator">
             <v-icon left dark>person</v-icon>
-            {{ authUser.name.split(' ')[0] }}
+            {{ authUser.name.split(' ').pop() }}
             <v-icon dark>arrow_drop_down</v-icon>
           </v-btn>
           <v-list dark class="secondary">
