@@ -293,18 +293,7 @@ export const store = new Vuex.Store({
       return state.usersData
     },
     getSections (state) {
-      let sortedSections = {}
-      Object.entries(state.sectionsData).sort((sectionA, sectionB) => {
-        if (sectionA[1].name > sectionB[1].name) {
-          return 1
-        } else if (sectionA[1].name < sectionB[1].name) {
-          return -1
-        }
-        return 0
-      }).forEach(([classid, section]) => {
-        sortedSections[classid] = section
-      })
-      return sortedSections
+      return state.sectionsData
     }
   }
 })

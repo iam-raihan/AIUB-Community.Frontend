@@ -196,9 +196,9 @@
       },
       sections () {
         let filterdSection = {}
-        Object.entries(this.$store.getters.getSections).filter(section => {
-          return section[1].name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
-        }).forEach(([classid, section]) => {
+        Object.entries(this.$store.getters.getSections).filter(section =>
+          section[1].name.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+        ).forEach(([classid, section]) => {
           filterdSection[classid] = section
         })
         return filterdSection
