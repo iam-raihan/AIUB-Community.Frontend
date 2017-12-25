@@ -6,8 +6,20 @@
       </v-flex>      
       <v-flex xs12 md6>
         <v-layout row>
+          <v-spacer></v-spacer>
+          <h4>
+            <VueTyper            
+              :text="['Tired of scheduling sections??', 'Tired of pre/final registration??']"
+              initial-action="erasing"
+              :erase-delay="50"
+              erase-style="select-back"
+            ></VueTyper>
+          </h4>
+          <v-spacer></v-spacer>
+        </v-layout>
+        
+        <v-layout row>
           <v-flex xs12>
-            <h4>Tired of scheduling sections??</h4>
             <h4>try, <b>Make My Schedule-AIUB</b></h4>
             <h5>your best schedule is just a few clicks away..!</b></h5>
           </v-flex>
@@ -75,8 +87,9 @@
 <script>
   require('../assets/vue-image-lightbox.min.css')
   import Lightbox from 'vue-image-lightbox'
+  import { VueTyper } from 'vue-typer'
 
-  let images = [
+  const images = [
     {
       thumb: '/static/step1.png',
       src: '/static/step1.png',
@@ -128,7 +141,8 @@
       }
     },
     components: {
-      Lightbox
+      Lightbox,
+      VueTyper
     },
     methods: {
       openDialog () {
