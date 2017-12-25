@@ -168,4 +168,7 @@
   h4, h5 {
     font-family: "Open Sans", sans-serif;
   }
+  h4 {
+    font-size: calc(0.75em + 2vmin);
+  }
 </style>
