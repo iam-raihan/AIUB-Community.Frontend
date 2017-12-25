@@ -69,35 +69,33 @@
       :mobile-break-point="1200"
       dark class="secondary"
       v-model="sideBar">
-      <pull-to>
-        <v-toolbar class="transparent">
-          <v-text-field
-            class="pt-4"
-            label="Search Section"
-            single-line
-            dark
-            prepend-icon="search"
-            v-model="search">
-          </v-text-field>
-          <v-btn
-            dark
-            icon
-            :loading="loading"
-            @click.stop="onSideBarBtnClick()">
-            <v-icon class="red--text">{{search.length === 0 ? 'refresh' : 'close'}}</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-list class="pt-0" dense style="cursor: pointer">
-          <template v-for="(section, classid) in sections">
-            <v-list-tile :to="'/section/'+classid" @click.stop="onSideBarListClick()">
-              <v-list-tile-content>
-                {{ section.name }}
-              </v-list-tile-content>
-              <v-divider :class="{'info' : section.users !== false}"></v-divider>
-            </v-list-tile>
-          </template>
-        </v-list>
-      </pull-to>
+      <v-toolbar class="transparent">
+        <v-text-field
+          class="pt-4"
+          label="Search Section"
+          single-line
+          dark
+          prepend-icon="search"
+          v-model="search">
+        </v-text-field>
+        <v-btn
+          dark
+          icon
+          :loading="loading"
+          @click.stop="onSideBarBtnClick()">
+          <v-icon class="red--text">{{search.length === 0 ? 'refresh' : 'close'}}</v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-list class="pt-0" dense style="cursor: pointer">
+        <template v-for="(section, classid) in sections">
+          <v-list-tile :to="'/section/'+classid" @click.stop="onSideBarListClick()">
+            <v-list-tile-content>
+              {{ section.name }}
+            </v-list-tile-content>
+            <v-divider :class="{'info' : section.users !== false}"></v-divider>
+          </v-list-tile>
+        </template>
+      </v-list>
     </v-navigation-drawer>
     <!-- @@@@@@@@@@@@@@@@ bottom sheet @@@@@@@@@@@@@@@@ -->
     <v-btn
@@ -168,11 +166,7 @@
 </template>
 
 <script>
-  import pullTo from 'vue-pull-to'
   export default {
-    components: {
-      pullTo
-    },
     data () {
       return {
         search: '',
