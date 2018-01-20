@@ -1,4 +1,6 @@
 # AIUB Community (frontend)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiam-raihan%2FAIUB-Community.Frontend.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiam-raihan%2FAIUB-Community.Frontend?ref=badge_shield)
+
 
 > aiubcommunity.com
 
@@ -54,3 +56,7 @@ Contributions are always welcome!
  [Webpack]: <https://webpack.js.org>
  [Babel]: <http://babeljs.io>
  [ESLint]: <http://eslint.org>
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiam-raihan%2FAIUB-Community.Frontend.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiam-raihan%2FAIUB-Community.Frontend?ref=badge_large)
