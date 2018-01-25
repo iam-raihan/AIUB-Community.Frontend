@@ -93,42 +93,42 @@
     {
       thumb: '/static/step1.png',
       src: '/static/step1.png',
-      caption: 'step1: Download > Install > Open "Make My Schedule Software" on your machine.'
+      caption: 'Step 1: Download > Install > Open "Make My Schedule" software on your machine.'
     },
     {
       thumb: '/static/step2.png',
       src: '/static/step2.png',
-      caption: 'step2: here you have to enter your <b>VUES Account</b> credentials. Don\'t miss the Note on top'
+      caption: 'Step 2: Here you have to enter your <b>VUES</b> account credentials. Don\'t miss the Note on top.'
     },
     {
       thumb: '/static/step3.png',
       src: '/static/step3.png',
-      caption: 'step3: after successful login, signup / signin <br> to your <b>AIUB Community Account</b>'
+      caption: 'Step 3: After successful login, signup / signin <br> to your <b>AIUB Community</b> account.'
     },
     {
       thumb: '/static/step4.png',
       src: '/static/step4.png',
-      caption: 'step4: after that click next and you will get all of your unlocked subjects for next semester like this'
+      caption: 'Step 4: After that click next and you will get all of your unlocked subjects for next semester like this.'
     },
     {
       thumb: '/static/step5.png',
       src: '/static/step5.png',
-      caption: 'step5: from here select sections for each of your selected subjects'
+      caption: 'Step 5: From here select sections for each of your selected subjects (optional).'
     },
     {
       thumb: '/static/step6.png',
       src: '/static/step6.png',
-      caption: 'step6: I think everything here makes sense. Do some configuration and click on Generate Schedule.<br>It\'s not like setting up an Enigma machine, right? Take it easy'
+      caption: 'Step 6: Now do some configuration (optional) and click on Generate Schedule. <br>It\'s not like setting up an Enigma machine, right? Take it easy.'
     },
     {
       thumb: '/static/step7.png',
       src: '/static/step7.png',
-      caption: 'step7: Finally, here\'s your best possible schedule among your selected sections. I hope that graphical presentation makes your schedule easy to understand.'
+      caption: 'Step 7: Finally, here\'s your best possible schedule. Cheers!! Now click "Save" button.'
     },
     {
       thumb: '/static/step8.png',
       src: '/static/step8.png',
-      caption: 'step8: click on "Pop Up" and you will get a mini window like these. You can pop up multiple schedule. These windows stay always on top, may be helpful when you browse to registration page in your VUES account.'
+      caption: 'Step 8: Click on "Pop Up" and you will get a mini window like these. You can pop up multiple schedule. These windows stay always on top, may be helpful when you browse to registration page in your VUES account.'
     }
   ]
 
