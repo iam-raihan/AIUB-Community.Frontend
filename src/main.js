@@ -1,5 +1,31 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify'
+
+import {
+  Vuetify,
+  VApp,
+  VBtn,
+  VFooter,
+  VForm,
+  VCard,
+  VMenu,
+  VGrid,
+  VChip,
+  VSubheader,
+  VAvatar,
+  VExpansionPanel,
+  VBadge,
+  VTextField,
+  VProgressCircular,
+  VBottomSheet,
+  VCheckbox,
+  VDivider,
+  VDialog,
+  VNavigationDrawer,
+  VIcon,
+  VList,
+  VToolbar
+ } from 'vuetify'
+
 import './stylus/main.styl'
 
 import App from './App'
@@ -8,7 +34,33 @@ import { store } from './store'
 import VueLazyLoad from 'vue-lazyload'
 import VueTouch from 'vue-touch'
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  components: {
+    VApp,
+    VBtn,
+    VFooter,
+    VForm,
+    VCard,
+    VMenu,
+    VGrid,
+    VChip,
+    VSubheader,
+    VAvatar,
+    VExpansionPanel,
+    VBadge,
+    VTextField,
+    VProgressCircular,
+    VBottomSheet,
+    VCheckbox,
+    VDivider,
+    VDialog,
+    VNavigationDrawer,
+    VIcon,
+    VList,
+    VToolbar
+  }
+})
+
 Vue.use(VueLazyLoad, {
   loading: '/static/loading.gif',
   error: '/static/loading.gif'
