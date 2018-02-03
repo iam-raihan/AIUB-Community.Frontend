@@ -87,14 +87,20 @@
         </v-btn>
       </v-toolbar>
       <v-list class="pt-0" dense style="cursor: pointer">
-        <template v-for="(section, classid) in sections">
-          <v-list-tile :to="'/section/'+classid" @click.stop="onSideBarListClick()">
+        <transition-slide>
+          <v-list-tile
+            ripple
+            v-for="(section, classid) in sections"
+            :key="classid"
+            :to="'/section/'+classid"
+            slot="section-list"
+            @click.stop="onSideBarListClick()">
             <v-list-tile-content>
               {{ section.name }}
             </v-list-tile-content>
             <v-divider :class="{'info' : section.users !== false}"></v-divider>
           </v-list-tile>
-        </template>
+        </transition-slide>
       </v-list>
     </v-navigation-drawer>
     <!-- @@@@@@@@@@@@@@@@ bottom sheet @@@@@@@@@@@@@@@@ -->
@@ -166,7 +172,11 @@
 </template>
 
 <script>
+  import transitionSlide from './TransitionSlide'
   export default {
+    components: {
+      'transition-slide': transitionSlide
+    },
     data () {
       return {
         search: '',
@@ -236,7 +246,3 @@
     }
   }
 </script>
-
-<style>
-
-</style>
