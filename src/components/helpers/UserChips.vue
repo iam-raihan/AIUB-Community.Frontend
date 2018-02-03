@@ -2,8 +2,10 @@
   <div>
     <v-menu
       offset-x
+      ref="menu"
       :close-on-content-click="false"
-       v-for="(user, i) in sectionUsers" :key="i"
+      v-for="(user, menuKey) in sectionUsers"
+      :key="menuKey"
       lazy>
       <v-chip
         slot="activator"
@@ -48,6 +50,7 @@
                 ripple
                 v-for="section in users[user.portalid].sections"
                 :key="section.classid"
+                @click="closeMenu(menuKey)"
                 :to="{name: 'section', params: {classid: section.classid}}"
                 slot="section-list">
                 <v-list-tile-content>
@@ -78,7 +81,10 @@
     methods: {
       ...mapActions([
         'loadUserData'
-      ])
+      ]),
+      closeMenu (item) {
+        this.$refs.menu[item].isActive = false
+      }
     }
   }
 </script>
