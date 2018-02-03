@@ -24,7 +24,7 @@ import {
   VIcon,
   VList,
   VToolbar
- } from 'vuetify'
+} from 'vuetify'
 
 import './stylus/main.styl'
 

@@ -3,7 +3,7 @@
     <navbar></navbar>
     <main>
       <v-content>
-        <transition name="fade">
+        <transition name="slide-fade"  mode="out-in">
           <router-view></router-view>
         </transition>
         <download class="pa-0"></download>
@@ -41,14 +41,11 @@
     display: inline-block;
     vertical-align: middle;
   }
-  .fade-enter-active, .fade-leave-active {
-    transition-property: opacity;
-    transition-duration: .25s;
+  .slide-fade-enter-active, .slide-fade-leave-active {
+    transition: all .3s ease;
   }
-  .fade-enter-active {
-    transition-delay: .25s;
-  }
-  .fade-enter, .fade-leave-active {
-    opacity: 0
+  .slide-fade-enter, .slide-fade-leave-to {
+    transform: translateY(-20px);
+    opacity: 0;
   }
 </style>
