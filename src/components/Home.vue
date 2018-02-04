@@ -32,7 +32,7 @@
               color="info"
               target="_blank"
               href="https://www.google.com">
-              <v-icon left>file_download</v-icon>
+              <v-icon left v-if="iconsLoaded">file_download</v-icon>
               Download v1.0&nbsp;
             </v-btn>
             <!-- @click="openDialog()" -->
@@ -43,7 +43,7 @@
               outline round large
               color="info"
               @click="openGallery()">
-              <v-icon left>photo_library</v-icon>
+              <v-icon left v-if="iconsLoaded">photo_library</v-icon>
               Screenshots&nbsp;&nbsp;&nbsp;
             </v-btn>
           </v-flex>
@@ -54,7 +54,7 @@
               color="accent"
               target="_blank"
               href="https://www.youtube.com">
-              <v-icon left>video_library</v-icon>
+              <v-icon left v-if="iconsLoaded">video_library</v-icon>
               short Tutorial
             </v-btn>
           </v-flex>
@@ -65,7 +65,7 @@
               color="accent"
               target="_blank"
               href="https://www.youtube.com">
-              <v-icon left>video_library</v-icon>
+              <v-icon left v-if="iconsLoaded">video_library</v-icon>
               full Tutorial&nbsp;&nbsp;
             </v-btn>
           </v-flex>
@@ -143,6 +143,11 @@
     components: {
       Lightbox,
       VueTyper
+    },
+    computed: {
+      iconsLoaded () {
+        return this.$store.getters.getIconsLoaded
+      }
     },
     methods: {
       openDialog () {

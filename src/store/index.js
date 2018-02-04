@@ -24,6 +24,7 @@ if (dataStoringFrom) {
 
 export const store = new Vuex.Store({
   state: {
+    iconsLoaded: false,
     openDialogs: {
       signIn: false,
       signUp: false,
@@ -44,6 +45,9 @@ export const store = new Vuex.Store({
     sectionsData: JSON.parse(localStorage.getItem('sectionsData')) || {}
   },
   mutations: {
+    setIconsLoaded (state, payload) {
+      state.iconsLoaded = payload
+    },
     setOpenDialogs (state, payload) {
       switch (payload.dialog) {
         case 'signIn':
@@ -145,7 +149,11 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    appLoaded ({dispatch, state}) {
+    appLoaded ({commit, state, dispatch}) {
+      document.fonts.addEventListener('loadingdone', () => {
+        console.log(`Loaded ${'1rem "Material Icons"'}: ${document.fonts.check('1rem "Material Icons"')}`)
+        commit('setIconsLoaded', true)
+      })
       if (state.authUser && isOldData) {
         dispatch('loadAuthUserSections')
       }
@@ -274,6 +282,9 @@ export const store = new Vuex.Store({
     }
   },
   getters: {
+    getIconsLoaded (state) {
+      return state.iconsLoaded
+    },
     getOpenDialogs (state) {
       return state.openDialogs
     },
