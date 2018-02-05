@@ -2,11 +2,21 @@
   <v-container ref="container" style="min-height:80vh">
     <v-layout row>
       <v-flex xs12>
-        <v-toolbar v-if="!section">
-          <v-toolbar-title>
-            Section Data Not Found...!
-          </v-toolbar-title>
-        </v-toolbar>
+        <template v-if="!section">
+          <v-toolbar>
+            <v-toolbar-title>
+              Section Data Not Found...!
+            </v-toolbar-title>
+          </v-toolbar>
+          <v-container fill-height>
+            <v-layout align-center>
+              <v-flex text-xs-center>
+                <img v-lazy="notFoundPicSrc">
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </template>
+
         <template v-else>
           <vueDataLoading
             @pull-down="loadSectionData()"
@@ -60,7 +70,8 @@
     },
     data () {
       return {
-        mediumScreen: window.innerWidth < 960
+        mediumScreen: window.innerWidth < 960,
+        notFoundPicSrc: '/static/not-found.gif'
       }
     },
     computed: {

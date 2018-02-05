@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import MySections from '@/components/MySections'
 import Section from '@/components/Section'
+import NotFound from '@/components/NotFound'
 import { store } from '@/store'
 
 Vue.use(Router)
@@ -40,6 +41,15 @@ export default new Router({
           next()
         }
       }
+    },
+    {
+      path: '/not-found',
+      name: 'not-found',
+      component: NotFound
+    },
+    {
+      path: '*',
+      redirect: 'not-found'
     }
   ],
   mode: 'history'
