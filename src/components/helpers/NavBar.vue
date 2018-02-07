@@ -37,13 +37,16 @@
 
         <v-btn 
           flat
-          v-if="loggedIn"        
+          v-if="loggedIn"
           :to="{name: 'mySections'}">
           <v-icon left dark>format_list_bulleted</v-icon>
           MY SECTIONS
         </v-btn>
         <v-menu offset-y v-if="loggedIn">
-          <v-btn flat slot="activator">
+          <v-btn
+            flat
+            slot="activator"
+            :loading="loadings.signingOut">
             <v-icon left dark>person</v-icon>
             {{ authUser.name.split(' ').pop() }}
             <v-icon dark>arrow_drop_down</v-icon>
@@ -81,7 +84,7 @@
         <v-btn
           dark
           icon
-          :loading="loading"
+          :loading="loadings.loadAllSections"
           @click.stop="onSideBarBtnClick()">
           <v-icon class="red--text">{{search.length === 0 ? 'refresh' : 'close'}}</v-icon>
         </v-btn>
@@ -92,7 +95,7 @@
             ripple
             v-for="(section, classid) in sections"
             :key="classid"
-            :to="'/section/'+classid"
+            :to="{name: 'section', params: {classid}}"
             slot="section-list"
             @click.stop="onSideBarListClick()">
             <v-list-tile-content>
@@ -195,8 +198,8 @@
       loggedIn () {
         return this.$store.getters.getLoggedIn
       },
-      loading () {
-        return this.$store.getters.getLoadings.loadAllSections
+      loadings () {
+        return this.$store.getters.getLoadings
       },
       sections () {
         let filterdSection = {}
@@ -212,8 +215,6 @@
       loggedIn () {
         if (this.loggedIn) {
           this.$router.push({name: 'mySections'})
-        } else {
-          this.$router.push({name: 'home'})
         }
       },
       lightBoxOn () {
@@ -229,7 +230,8 @@
         this.$store.dispatch('openDialogs', {'dialog': value, 'open': true})
       },
       signOut () {
-        this.$store.dispatch('signOut')
+        this.$store.dispatch('signOutClicked', true)
+        this.$router.push({name: 'sign-out'})
       },
       onSideBarBtnClick () {
         if (this.search.length === 0) {

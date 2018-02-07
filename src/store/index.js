@@ -25,6 +25,7 @@ if (dataStoringFrom) {
 export const store = new Vuex.Store({
   state: {
     iconsLoaded: false,
+    signOutClicked: false,
     openDialogs: {
       signIn: false,
       signUp: false,
@@ -33,6 +34,7 @@ export const store = new Vuex.Store({
     },
     loadings: {
       axios: false,
+      signingOut: false,
       loadAuthUserSections: false,
       loadAllSections: false
     },
@@ -47,6 +49,9 @@ export const store = new Vuex.Store({
   mutations: {
     setIconsLoaded (state, payload) {
       state.iconsLoaded = payload
+    },
+    setSignOutClicked (state, payload) {
+      state.signOutClicked = payload
     },
     setOpenDialogs (state, payload) {
       switch (payload.dialog) {
@@ -67,6 +72,9 @@ export const store = new Vuex.Store({
       switch (payload.item) {
         case 'axios':
           state.loadings.axios = payload.value
+          break
+        case 'signingOut':
+          state.loadings.signingOut = payload.value
           break
         case 'loadAuthUserSections':
           state.loadings.loadAuthUserSections = payload.value
@@ -151,7 +159,7 @@ export const store = new Vuex.Store({
   actions: {
     appLoaded ({commit, state, dispatch}) {
       document.fonts.addEventListener('loadingdone', () => {
-        console.log(`Loaded ${'1rem "Material Icons"'}: ${document.fonts.check('1rem "Material Icons"')}`)
+        console.log(`Loaded '1rem Material Icons': ${document.fonts.check('1rem "Material Icons"')}`)
         commit('setIconsLoaded', true)
       })
       if (state.authUser && isOldData) {
@@ -212,11 +220,26 @@ export const store = new Vuex.Store({
         }
       )
     },
+    signOutClicked ({commit}, payload) {
+      commit('setSignOutClicked', payload)
+    },
     signOut ({commit, state}) {
+      commit('setLoadings', {'item': 'signingOut', 'value': true})
+      commit('setSignOutClicked', false)
       axios.post('/auth/user/signout?token=' + state.authUser.token
-      ).then((response) => { console.log(response.data) }
-      ).catch((error) => { console.log(error) })
-      commit('setAuthUser', false)
+      ).then(
+        (response) => {
+          console.log(response.data)
+          commit('setLoadings', {'item': 'signingOut', 'value': false})
+          commit('setAuthUser', false)
+        }
+      ).catch(
+        (error) => {
+          console.log(error)
+          commit('setLoadings', {'item': 'signingOut', 'value': false})
+          commit('setAuthUser', false)
+        }
+      )
     },
     setUnauthorized ({commit}) {
       commit('setAuthUser', false)
@@ -282,6 +305,9 @@ export const store = new Vuex.Store({
     }
   },
   getters: {
+    getSignOutClicked (state) {
+      return state.signOutClicked
+    },
     getIconsLoaded (state) {
       return state.iconsLoaded
     },

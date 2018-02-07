@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import MySections from '@/components/MySections'
 import Section from '@/components/Section'
+import SignOut from '@/components/SignOut'
 import NotFound from '@/components/NotFound'
 import { store } from '@/store'
 
@@ -39,6 +40,18 @@ export default new Router({
           next(from.path)
         } else {
           next()
+        }
+      }
+    },
+    {
+      path: '/sign-out',
+      name: 'sign-out',
+      component: SignOut,
+      beforeEnter: (to, from, next) => {
+        if (store.getters.getSignOutClicked) {
+          next()
+        } else {
+          next({name: 'not-found'})
         }
       }
     },
