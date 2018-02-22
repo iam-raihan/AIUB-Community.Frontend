@@ -1,20 +1,23 @@
 <template>
-  <v-app toolbar>
-    <navbar></navbar>
-    <main>
-      <v-content>
-        <transition name="slide-fade"  mode="out-in">
-          <router-view></router-view>
-        </transition>
-        <download class="pa-0"></download>
-        <signIn class="pa-0"></signIn>
-        <signUp class="pa-0"></signUp>
-      </v-content>
-    </main>    
-    <v-footer class="footer pa-2">
-      <code>>> Website under development stage. More features coming up! <a target="_blank" href="https://google.com"><img class="footer-pic" height="20px" src="/static/GitHub-Mark-32px.png" alt="Github"></a></code>
-    </v-footer>
-  </v-app>
+  <div>
+    <v-app toolbar v-if="iconsLoaded">
+      <navbar></navbar>
+      <main>
+        <v-content>
+          <transition name="slide-fade"  mode="out-in">
+            <router-view></router-view>
+          </transition>
+          <download class="pa-0"></download>
+          <signIn class="pa-0"></signIn>
+          <signUp class="pa-0"></signUp>
+        </v-content>
+      </main>    
+      <v-footer class="footer pa-2">
+        <code>>> Website under development stage. More features coming up! <a target="_blank" href="https://google.com"><img class="footer-pic" height="20px" src="/static/GitHub-Mark-32px.png" alt="Github"></a></code>
+      </v-footer>
+    </v-app>
+    <div class="wait-screen" v-else><div></div><div></div><div></div></div>
+  </div>
 </template>
 
 <script>
@@ -28,6 +31,11 @@
       download,
       signIn,
       signUp
+    },
+    computed: {
+      iconsLoaded () {
+        return this.$store.getters.getIconsLoaded
+      }
     }
   }
 </script>

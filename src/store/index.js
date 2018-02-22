@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import FontFaceObserver from 'fontfaceobserver'
 
 Vue.use(Vuex)
 
@@ -158,8 +159,23 @@ export const store = new Vuex.Store({
   },
   actions: {
     appLoaded ({commit, state, dispatch}) {
-      document.fonts.addEventListener('loadingdone', () => {
-        console.log(`Loaded '1rem Material Icons': ${document.fonts.check('1rem "Material Icons"')}`)
+      const fontA = new FontFaceObserver('Material Icons')
+      // const fontB = new FontFaceObserver('Open Sans')
+      // const fontC = new FontFaceObserver('Roboto', {
+      //   weight: 500
+      // })
+      // Promise.all([fontA.load(), fontB.load(), fontC.load()]).then(() => {
+      //   console.log('fontObserver: loaded')
+      //   commit('setIconsLoaded', true)
+      // }, () => {
+      //   console.log('fontObserver: 3s timeout')
+      //   commit('setIconsLoaded', true)
+      // })
+      fontA.load().then(() => {
+        console.log('fontObserver: loaded')
+        commit('setIconsLoaded', true)
+      }, () => {
+        console.log('fontObserver: 3s timeout')
         commit('setIconsLoaded', true)
       })
       if (state.authUser && isOldData) {

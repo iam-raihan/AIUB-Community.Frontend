@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.17.0",
+    "fontfaceobserver": "^2.0.13",
     "vue": "^2.4.2",
     "vue-data-loading": "^0.2.3",
     "vue-image-lightbox": "github:iam-raihan/vue-image-lightbox",
