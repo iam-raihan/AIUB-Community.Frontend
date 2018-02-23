@@ -21,7 +21,6 @@
 <script>
   export default {
     mounted () {
-      console.log('sign out clicked : ' + this.$store.getters.getSignOutClicked)
       this.$store.dispatch('signOut')
     },
     data () {
