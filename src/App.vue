@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app toolbar v-if="iconsLoaded">
+    <v-app toolbar v-if="fontsLoaded">
       <navbar></navbar>
       <main>
         <v-content>
@@ -33,8 +33,8 @@
       signUp
     },
     computed: {
-      iconsLoaded () {
-        return this.$store.getters.getIconsLoaded
+      fontsLoaded () {
+        return this.$store.getters.getFontsLoaded
       }
     }
   }

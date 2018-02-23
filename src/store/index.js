@@ -25,7 +25,7 @@ if (dataStoringFrom) {
 
 export const store = new Vuex.Store({
   state: {
-    iconsLoaded: false,
+    fontsLoaded: false,
     signOutClicked: false,
     openDialogs: {
       signIn: false,
@@ -48,8 +48,8 @@ export const store = new Vuex.Store({
     sectionsData: JSON.parse(localStorage.getItem('sectionsData')) || {}
   },
   mutations: {
-    setIconsLoaded (state, payload) {
-      state.iconsLoaded = payload
+    setFontsLoaded (state, payload) {
+      state.fontsLoaded = payload
     },
     setSignOutClicked (state, payload) {
       state.signOutClicked = payload
@@ -160,23 +160,16 @@ export const store = new Vuex.Store({
   actions: {
     appLoaded ({commit, state, dispatch}) {
       const fontA = new FontFaceObserver('Material Icons')
-      // const fontB = new FontFaceObserver('Open Sans')
-      // const fontC = new FontFaceObserver('Roboto', {
-      //   weight: 500
-      // })
-      // Promise.all([fontA.load(), fontB.load(), fontC.load()]).then(() => {
-      //   console.log('fontObserver: loaded')
-      //   commit('setIconsLoaded', true)
-      // }, () => {
-      //   console.log('fontObserver: 3s timeout')
-      //   commit('setIconsLoaded', true)
-      // })
-      fontA.load().then(() => {
+      const fontB = new FontFaceObserver('Open Sans')
+      const fontC = new FontFaceObserver('Roboto', {
+        weight: 500
+      })
+      Promise.all([fontA.load(), fontB.load(), fontC.load()]).then(() => {
         console.log('fontObserver: loaded')
-        commit('setIconsLoaded', true)
+        commit('setFontsLoaded', true)
       }, () => {
         console.log('fontObserver: 3s timeout')
-        commit('setIconsLoaded', true)
+        commit('setFontsLoaded', true)
       })
       if (state.authUser && isOldData) {
         dispatch('loadAuthUserSections')
@@ -324,8 +317,8 @@ export const store = new Vuex.Store({
     getSignOutClicked (state) {
       return state.signOutClicked
     },
-    getIconsLoaded (state) {
-      return state.iconsLoaded
+    getFontsLoaded (state) {
+      return state.fontsLoaded
     },
     getOpenDialogs (state) {
       return state.openDialogs
