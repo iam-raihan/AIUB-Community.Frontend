@@ -31,7 +31,7 @@
               outline round large
               color="info"
               target="_blank"
-              href="https://www.google.com">
+              href="https://www.google.com/search?q=coming+soon&tbm=isch">
               <v-icon left>file_download</v-icon>
               Download v1.0&nbsp;
             </v-btn>
@@ -53,7 +53,7 @@
               outline round large
               color="accent"
               target="_blank"
-              href="https://www.youtube.com">
+              href="https://youtu.be/BHBLHvq0_BA">
               <v-icon left>video_library</v-icon>
               short Tutorial
             </v-btn>
@@ -64,7 +64,7 @@
               outline round large
               color="accent"
               target="_blank"
-              href="https://www.youtube.com">
+              href="https://youtu.be/nbmJnCHXaW8">
               <v-icon left>video_library</v-icon>
               full Tutorial&nbsp;&nbsp;
             </v-btn>

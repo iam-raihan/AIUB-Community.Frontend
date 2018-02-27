@@ -29,7 +29,7 @@
               color="info"
               flat
               target="_blank"
-              href="https://www.google.com">
+              href="https://www.google.com/search?q=coming+soon&tbm=isch">
               Download
             </v-btn>
             <!-- @click="openDialog()" -->

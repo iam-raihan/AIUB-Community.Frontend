@@ -30,14 +30,14 @@
               color="success"
               flat
               target="_blank"
-              href="https://google.com">
+              href="https://www.google.com/search?q=coming+soon&tbm=isch">
               Portable
             </v-btn>          
             <v-btn
               color="info"
               flat
               target="_blank"
-              href="https://google.com">
+              href="https://www.google.com/search?q=coming+soon&tbm=isch">
               Installer
             </v-btn>
           </v-card-actions>
