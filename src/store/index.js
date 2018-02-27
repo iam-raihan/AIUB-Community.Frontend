@@ -5,7 +5,7 @@ import FontFaceObserver from 'fontfaceobserver'
 
 Vue.use(Vuex)
 
-axios.defaults.baseURL = 'http://localhost:7000/api'
+axios.defaults.baseURL = 'https://api.aiubcommunity.com'
 
 // ##########
 // remove 1 hour old user + section data stored in localstorage
