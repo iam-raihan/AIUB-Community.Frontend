@@ -29,7 +29,7 @@
               color="info"
               flat
               target="_blank"
-              href="https://www.google.com/search?q=coming+soon&tbm=isch">
+              href="https://s3.ap-south-1.amazonaws.com/aiubcommunity/MMS-Installer.exe">
               Download
             </v-btn>
             <!-- @click="openDialog()" -->

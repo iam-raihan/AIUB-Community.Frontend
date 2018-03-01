@@ -31,7 +31,7 @@
               outline round large
               color="info"
               target="_blank"
-              href="https://www.google.com/search?q=coming+soon&tbm=isch">
+              href="https://s3.ap-south-1.amazonaws.com/aiubcommunity/MMS-Installer.exe">
               <v-icon left>file_download</v-icon>
               Download v1.0&nbsp;
             </v-btn>
