@@ -2,7 +2,7 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiam-raihan%2FAIUB-Community.Frontend.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiam-raihan%2FAIUB-Community.Frontend?ref=badge_shield)
 
 
-> aiubcommunity.com
+> [aiubcommunity.com](https://aiubcommunity.com)
 
 ## Technologies Used
 
