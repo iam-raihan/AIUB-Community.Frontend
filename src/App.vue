@@ -7,8 +7,6 @@
           <transition name="slide-fade"  mode="out-in">
             <router-view></router-view>
           </transition>
-          <signIn class="pa-0"></signIn>
-          <signUp class="pa-0"></signUp>
         </v-content>
       </main>    
       <v-footer class="footer pa-2">
@@ -21,13 +19,9 @@
 
 <script>
   import navbar from '@/components/helpers/NavBar'
-  import signIn from '@/components/helpers/SignIn'
-  import signUp from '@/components/helpers/SignUp'
   export default {
     components: {
-      navbar,
-      signIn,
-      signUp
+      navbar
     },
     computed: {
       fontsLoaded () {

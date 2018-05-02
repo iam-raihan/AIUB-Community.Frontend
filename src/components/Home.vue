@@ -35,7 +35,6 @@
               <v-icon left>file_download</v-icon>
               Download v1.0&nbsp;
             </v-btn>
-            <!-- @click="openDialog()" -->
           </v-flex>
 
           <v-flex xs12 sm6 text-sm-left>
@@ -145,14 +144,11 @@
       VueTyper
     },
     methods: {
-      openDialog () {
-        this.$store.dispatch('openDialogs', {'dialog': 'download', 'open': true})
-      },
       openGallery () {
         this.$refs.lightbox.showImage(0)
       },
       lightBoxOn (value) {
-        this.$store.dispatch('openDialogs', {'dialog': 'lightBox', 'open': value})
+        this.$store.dispatch('lightBoxOn', value)
       }
     }
   }

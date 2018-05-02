@@ -22,7 +22,7 @@
         <v-btn 
           flat
           v-if="!loggedIn"        
-          @click.stop="openDialogs('signIn')">
+          :to="{name: 'sign-in'}">
           <v-icon left dark>person</v-icon>
           SIGN IN
         </v-btn>
@@ -30,7 +30,7 @@
         <v-btn 
           flat
           v-if="!loggedIn"        
-          @click.stop="openDialogs('signUp')">
+          :to="{name: 'sign-up'}">
           <v-icon left dark>person_add</v-icon>
           SIGN UP
         </v-btn>
@@ -135,7 +135,8 @@
         
         <v-list-tile
           v-if="!loggedIn"
-          @click.stop="bottomSheet = false, openDialogs('signIn')">
+          @click.stop="bottomSheet = false"
+          :to="{name: 'sign-in'}">
           <v-list-tile-action>
             <v-icon dark>person</v-icon>
           </v-list-tile-action>
@@ -144,7 +145,8 @@
 
         <v-list-tile
           v-if="!loggedIn"
-          @click.stop="bottomSheet = false, openDialogs('signUp')">
+          @click.stop="bottomSheet = false"
+          :to="{name: 'sign-up'}">
           <v-list-tile-action>
             <v-icon dark>person_add</v-icon>
           </v-list-tile-action>
@@ -175,6 +177,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import transitionSlide from './TransitionSlide'
   export default {
     components: {
@@ -189,18 +192,12 @@
       }
     },
     computed: {
-      lightBoxOn () {
-        return this.$store.getters.getOpenDialogs.lightBox
-      },
-      authUser () {
-        return this.$store.getters.getAuthUser
-      },
-      loggedIn () {
-        return this.$store.getters.getLoggedIn
-      },
-      loadings () {
-        return this.$store.getters.getLoadings
-      },
+      ...mapGetters({
+        loadings: 'getLoadings',
+        lightBoxOn: 'getLightBoxOn',
+        loggedIn: 'getLoggedIn',
+        authUser: 'getAuthUser'
+      }),
       sections () {
         let filterdSection = {}
         Object.entries(this.$store.getters.getSections).filter(section =>
@@ -212,23 +209,11 @@
       }
     },
     watch: {
-      loggedIn () {
-        if (this.loggedIn) {
-          this.$router.push({name: 'mySections'})
-        }
-      },
-      lightBoxOn () {
-        if (this.lightBoxOn) {
-          this.sideBar = false
-        } else if (this.largeScreen) {
-          this.sideBar = true
-        }
+      lightBoxOn (isOpen) {
+        this.sideBar = isOpen ? false : this.largeScreen
       }
     },
     methods: {
-      openDialogs (value) {
-        this.$store.dispatch('openDialogs', {'dialog': value, 'open': true})
-      },
       signOut () {
         this.$store.dispatch('signOutClicked', true)
         this.$router.push({name: 'sign-out'})
