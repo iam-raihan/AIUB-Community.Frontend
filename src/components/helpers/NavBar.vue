@@ -90,7 +90,7 @@
         </v-btn>
       </v-toolbar>
       <v-list class="pt-0" dense style="cursor: pointer">
-        <transition-slide>
+        <my-transition-slide>
           <v-list-tile
             ripple
             v-for="(section, classid) in sections"
@@ -103,7 +103,7 @@
             </v-list-tile-content>
             <v-divider :class="{'info' : section.users !== false}"></v-divider>
           </v-list-tile>
-        </transition-slide>
+        </my-transition-slide>
       </v-list>
     </v-navigation-drawer>
     <!-- @@@@@@@@@@@@@@@@ bottom sheet @@@@@@@@@@@@@@@@ -->
@@ -178,10 +178,10 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import transitionSlide from './TransitionSlide'
+  import TransitionSlide from './TransitionSlide'
   export default {
     components: {
-      'transition-slide': transitionSlide
+      'my-transition-slide': TransitionSlide
     },
     data () {
       return {

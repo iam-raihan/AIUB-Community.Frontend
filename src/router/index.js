@@ -4,8 +4,8 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import MySections from '@/components/MySections'
 import Section from '@/components/Section'
-import signIn from '@/components/helpers/SignIn'
-import signUp from '@/components/helpers/SignUp'
+import SignIn from '@/components/helpers/SignIn'
+import SignUp from '@/components/helpers/SignUp'
 import SignOut from '@/components/SignOut'
 import NotFound from '@/components/NotFound'
 import { store } from '@/store'
@@ -34,13 +34,13 @@ const router = new Router({
     {
       path: '/sign-in',
       name: 'sign-in',
-      component: signIn,
+      component: SignIn,
       meta: { requiresGuest: true }
     },
     {
       path: '/sign-up',
       name: 'sign-up',
-      component: signUp,
+      component: SignUp,
       meta: { requiresGuest: true }
     },
     {

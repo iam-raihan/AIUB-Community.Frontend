@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app toolbar v-if="fontsLoaded">
-      <navbar></navbar>
+      <my-navbar></my-navbar>
       <main>
         <v-content>
           <transition name="slide-fade"  mode="out-in">
@@ -18,10 +18,10 @@
 </template>
 
 <script>
-  import navbar from '@/components/helpers/NavBar'
+  import NavBar from '@/components/helpers/NavBar'
   export default {
     components: {
-      navbar
+      'my-navbar': NavBar
     },
     computed: {
       fontsLoaded () {

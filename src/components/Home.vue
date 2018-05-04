@@ -8,12 +8,12 @@
         <v-layout row>
           <v-spacer></v-spacer>
           <h4>
-            <VueTyper            
+            <vue-typer
               :text="['Tired of scheduling sections??', 'Tired of pre/final registration??']"
               initial-action="erasing"
               :erase-delay="50"
               erase-style="select-back"
-            ></VueTyper>
+            ></vue-typer>
           </h4>
           <v-spacer></v-spacer>
         </v-layout>
@@ -72,14 +72,14 @@
       </v-flex>
     </v-layout>
 
-    <lightbox
+    <light-box
       :images="images"
       ref="lightbox"
       show-caption
       @lightBoxOn="lightBoxOn($event)"
       :showLightBox="false"
       :nThumbs="lightBoxThumbs"
-    ></lightbox>
+    ></light-box>
   </v-container>
 </template>
 
@@ -140,8 +140,8 @@
       }
     },
     components: {
-      Lightbox,
-      VueTyper
+      'light-box': Lightbox,
+      'vue-typer': VueTyper
     },
     methods: {
       openGallery () {

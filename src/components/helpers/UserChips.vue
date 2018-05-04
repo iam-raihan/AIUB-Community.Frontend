@@ -45,7 +45,7 @@
               {{ users[user.portalid].sections.length === 0 ? 'No ' : '' }}Saved Sections
             </v-subheader>
             <!-- @@@@@@@@@@@@@@@@ Loop for SECTIONS _of_ Section => User @@@@@@@@@@@@@@@@ -->
-            <transition-slide>
+            <my-transition-slide>
               <v-list-tile
                 ripple
                 v-for="section in users[user.portalid].sections"
@@ -57,7 +57,7 @@
                   {{ section.name }}
                 </v-list-tile-content>
               </v-list-tile>
-            </transition-slide>
+            </my-transition-slide>
           </v-list>
         </template>
       </v-card>
@@ -66,11 +66,11 @@
 </template>
 
 <script>
-  import transitionSlide from './TransitionSlide'
+  import TransitionSlide from './TransitionSlide'
   import { mapGetters, mapActions } from 'vuex'
   export default {
     components: {
-      'transition-slide': transitionSlide
+      'my-transition-slide': TransitionSlide
     },
     props: ['sectionUsers', 'authUserPortalId'],
     computed: {
