@@ -47,14 +47,21 @@
               <small>*indicates required field</small>
             </v-card-text>
             <v-card-actions>
-              <v-container class="text-xs-right">
-              <v-btn
-                color="info"
-                :disabled="!form.valid"
-                type="submit"
-                :loading="loadings.axios">
-                Sign In
-              </v-btn>
+              <v-container>
+                <v-layout>
+                  <v-flex xs6 pt-2>
+                    <router-link :to="{name: 'forgot'}">forgot password</router-link>
+                  </v-flex>
+                  <v-flex xs6 text-xs-right>
+                    <v-btn
+                      color="info"
+                      :disabled="!form.valid"
+                      type="submit"
+                      :loading="loadings.axios">
+                      SIGN IN
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
               </v-container>
             </v-card-actions>
           </v-form>

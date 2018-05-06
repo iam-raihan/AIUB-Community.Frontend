@@ -7,6 +7,7 @@ import Section from '@/components/Section'
 import SignIn from '@/components/auth/SignIn'
 import SignUp from '@/components/auth/SignUp'
 import SignOut from '@/components/auth/SignOut'
+import ForgotPassword from '@/components/auth/ForgotPassword'
 import NotFound from '@/components/NotFound'
 import { store } from '@/store'
 
@@ -55,6 +56,12 @@ const router = new Router({
           next({name: 'not-found'})
         }
       }
+    },
+    {
+      path: '/forgot',
+      name: 'forgot',
+      component: ForgotPassword,
+      meta: { requiresGuest: true }
     },
     {
       path: '/not-found',
