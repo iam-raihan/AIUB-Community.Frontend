@@ -50,7 +50,7 @@
               <v-container>
                 <v-layout>
                   <v-flex xs6 pt-2>
-                    <router-link :to="{name: 'forgot'}">forgot password</router-link>
+                    <router-link :to="{name: 'forgot-password'}">forgot password</router-link>
                   </v-flex>
                   <v-flex xs6 text-xs-right>
                     <v-btn
@@ -91,7 +91,7 @@
           ],
           pass: [
             (v) => !!v || 'Password is required',
-            (v) => v.length >= 8 || v.length === 0 || 'Password must be atleast 8 characters',
+            (v) => v.length >= 8 || v.length === 0 || 'Password must be at least 8 characters',
             () => this.signInErrorMsgs.pass
           ]
         }

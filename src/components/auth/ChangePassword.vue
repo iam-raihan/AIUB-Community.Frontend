@@ -5,8 +5,8 @@
         <v-card>
           <v-card-title>
             <div>
-              <div class="headline">Find Your Account</div>
-              <span class="grey--text">Enter your ID and Email to verify your identity</span>
+              <div class="headline">Change Password</div>
+              <span class="grey--text">Enter and confirm your new password</span>
             </div>
           </v-card-title>
           <v-form v-model="form.valid" ref="form" @submit.prevent="submit()">
@@ -15,20 +15,34 @@
                 <v-layout wrap>
                   <v-flex xs12>
                     <v-text-field
-                      label="Enter ID"
-                      hint="XX-XXXXX-X"
-                      v-model="form.id"
-                      :rules="rules.id"
+                      label="Password reset token"
+                      disabled
+                      v-model="token"
+                      :rules="rules.token"
                       required>
                     </v-text-field>
                   </v-flex>
                   <v-flex xs12>
                     <v-text-field
-                      label="Enter Email"
-                      hint="Enter email of your AIUB Community account"
-                      v-model="form.email"
-                      :rules="rules.email"
-                      type="email"
+                      label="Enter New Password"
+                      hint="Enter your new password"
+                      :append-icon="form.passVisible ? 'visibility' : 'visibility_off'"
+                      :append-icon-cb="() => (form.passVisible = !form.passVisible)"
+                      v-model="form.pass"
+                      :rules="rules.pass"
+                      :type="form.passVisible ? 'text' : 'password'"
+                      required>
+                    </v-text-field>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field
+                      label="Confirm New Password"
+                      hint="Confirm your new password"
+                      :append-icon="form.conPassVisible ? 'visibility' : 'visibility_off'"
+                      :append-icon-cb="() => (form.conPassVisible = !form.conPassVisible)"
+                      v-model="form.conPass"
+                      :rules="rules.conPass"
+                      :type="form.conPassVisible ? 'text' : 'password'"
                       required>
                     </v-text-field>
                   </v-flex>
@@ -40,29 +54,24 @@
               <v-container text-xs-right>
                 <transition name="button-fade" mode="out-in">
                   <v-btn
-                    v-if="!emailSent"
+                    v-if="!passChanged"
                     color="info"
                     :disabled="!form.valid"
                     type="submit"
                     :loading="loading">
-                    VERIFY
+                    CHANGE PASSWORD
                   </v-btn>
                   <v-subheader
                     style="height:36px"
                     v-else
                     class="green--text">
-                    An email has been sent with password reset link
+                    Password Changed ! You may sign in now
                   </v-subheader>
                 </transition>
               </v-container>
             </v-card-actions>
           </v-form>
         </v-card>
-        <p align="center" class="support-email grey--text">
-          <small>
-            Didn't receive any email? contact at <a href="mailto:accounts@aiubcommunity.com">accounts@aiubcommunity.com</a>
-          </small>
-        </p>
       </v-flex>
     </v-layout>
   </v-container>
@@ -71,61 +80,68 @@
 <script>
   import axios from 'axios'
   export default {
+    created () {
+      if (this.token === undefined) {
+        this.$router.push({name: 'forgot-password'})
+      }
+    },
+    props: [
+      'token'
+    ],
     data () {
       return {
         form: {
-          id: '',
-          email: '',
+          pass: '',
+          conPass: '',
+          passVisible: false,
+          conPassVisible: false,
           valid: false
         },
         rules: {
-          id: [
-            (v) => !!v || 'ID is required',
-            (v) => (v.length === 10 && v[2] === '-' && v[8] === '-') || v.length === 0 || 'Invalid VUES ID',
-            () => this.errorMsgs.id
+          pass: [
+            (v) => !!v || 'Password is required',
+            (v) => v.length >= 8 || v.length === 0 || 'Password must be at least 8 characters',
+            () => this.errorMsgs.pass
           ],
-          email: [
-            (v) => !!v || 'Email is required',
-            (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || v.length === 0 || 'Not a valid email address',
-            () => this.errorMsgs.email
+          conPass: [
+            (v) => !!v || 'Confirm Password is required',
+            (v) => v === this.form.pass || v.length === 0 || 'Password doesn\'t match'
+          ],
+          token: [
+            () => this.errorMsgs.token
           ]
         },
         loading: false,
         errorMsgs: {
-          id: true,
-          email: true
+          pass: true,
+          token: true
         },
-        emailSent: false
+        passChanged: false
       }
     },
     watch: {
-      'form.id' () {
-        this.errorMsgs.id = true
-      },
-      'form.email' () {
-        this.errorMsgs.email = true
+      'form.pass' () {
+        this.errorMsgs.pass = true
       }
     },
     methods: {
       submit () {
         if (this.form.valid) {
           this.loading = true
-          axios.post('user/forgot-password', {
-            id: this.form.id,
-            email: this.form.email
+          axios.post('user/change-password', {
+            pass: this.form.pass,
+            token: this.token
           })
           .then((response) => {
-            this.emailSent = true
+            this.passChanged = true
             this.loading = false
           })
           .catch((error) => {
             if (error.response.status === 422) {
               var data = error.response.data
               this.errorMsgs[data.field] = data.msg
-            } else {
-              this.errorMsgs.email = 'Failed to send email!'
+              this.$refs.form.validate()
             }
-            this.$refs.form.validate()
             this.loading = false
           })
         }
@@ -148,9 +164,5 @@
   .button-fade-leave-to {
     transform: translateX(-10px);
     opacity: 0;
-  }
-  .support-email {
-    font-size: medium;
-    margin-top: 5px;
   }
 </style>

@@ -8,6 +8,7 @@ import SignIn from '@/components/auth/SignIn'
 import SignUp from '@/components/auth/SignUp'
 import SignOut from '@/components/auth/SignOut'
 import ForgotPassword from '@/components/auth/ForgotPassword'
+import ChangePassword from '@/components/auth/ChangePassword'
 import NotFound from '@/components/NotFound'
 import { store } from '@/store'
 
@@ -58,10 +59,17 @@ const router = new Router({
       }
     },
     {
-      path: '/forgot',
-      name: 'forgot',
+      path: '/forgot-password',
+      name: 'forgot-password',
       component: ForgotPassword,
       meta: { requiresGuest: true }
+    },
+    {
+      path: '/change-password',
+      name: 'change-password',
+      component: ChangePassword,
+      meta: { requiresGuest: true },
+      props: (route) => ({ token: route.query.token })
     },
     {
       path: '/not-found',
