@@ -22,7 +22,7 @@
               <v-btn
                 color="info"
                 target="_blank"
-                href="https://www.google.com">
+                href="https://s3.ap-south-1.amazonaws.com/aiubcommunity/MMS-Installer.exe">
                 Download
               </v-btn>
             </v-container>
