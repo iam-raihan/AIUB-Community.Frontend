@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" max-width="300px" @keydown.esc="dialog = false">
+      <v-flex xs12 md5>
         <v-card>
           <v-card-title>
             <div>
@@ -47,25 +47,26 @@
               <small>*indicates required field</small>
             </v-card-text>
             <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="accent"
-                flat
-                @click="dialog = false">
-                Close
-              </v-btn>          
-              <v-btn
-                color="info"
-                flat
-                :disabled="!form.valid"
-                type="submit"
-                :loading="loadings.axios">
-                Sign In
-              </v-btn>
+              <v-container>
+                <v-layout>
+                  <v-flex xs6 pt-2>
+                    <router-link :to="{name: 'forgot-password'}">forgot password</router-link>
+                  </v-flex>
+                  <v-flex xs6 text-xs-right>
+                    <v-btn
+                      color="info"
+                      :disabled="!form.valid"
+                      type="submit"
+                      :loading="loadings.axios">
+                      SIGN IN
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-card-actions>
           </v-form>
         </v-card>
-      </v-dialog>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -90,23 +91,13 @@
           ],
           pass: [
             (v) => !!v || 'Password is required',
-            (v) => v.length >= 8 || v.length === 0 || 'Password must be atleast 8 characters',
+            (v) => v.length >= 8 || v.length === 0 || 'Password must be at least 8 characters',
             () => this.signInErrorMsgs.pass
           ]
         }
       }
     },
     computed: {
-      dialog: {
-        get: function () {
-          return this.$store.getters.getOpenDialogs.signIn
-        },
-        set: function (value) {
-          if (!value) {
-            this.$store.dispatch('openDialogs', {'dialog': 'signIn', 'open': false})
-          }
-        }
-      },
       ...mapGetters({
         loadings: 'getLoadings',
         signInErrorMsgs: 'getSignInErrorMsgs',
@@ -127,10 +118,9 @@
       'loadings.axios' () {
         this.$refs.form.validate()
       },
-      dialog (value) {
-        if (!value) {
-          this.form.id = ''
-          this.form.pass = ''
+      loggedIn (isLoggedIn) {
+        if (isLoggedIn) {
+          this.$router.push(this.$route.query.redirect || {name: 'mySections'})
         }
       }
     },

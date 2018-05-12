@@ -2,7 +2,7 @@
   <v-container ref="container" style="min-height:80vh">
     <v-layout row>
       <v-flex xs12>
-        <vueDataLoading
+        <vue-data-loading
           @pull-down="loadAuthUserSections()"
           :loading="loadings.loadAuthUserSections"
           :listens="['pull-down']"
@@ -40,30 +40,30 @@
                   <v-card-text class="grey lighten-3">
                     <center v-if="authUserSection.users.length === 1">No one else saved this section yet</center>
                     <!-- @@@@@@@@@@@@@@@@ Loop for USERS _of_ AuthUser => Section @@@@@@@@@@@@@@@@ -->
-                    <userChips
+                    <user-chips
                       v-else
                       :sectionUsers="authUserSection.users"
                       :authUserPortalId="authUser.portalid">
-                    </userChips>
+                    </user-chips>
                   </v-card-text>
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-card>
-        </vueDataLoading>
+        </vue-data-loading>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-  import vueDataLoading from 'vue-data-loading'
-  import userChips from './helpers/UserChips'
+  import VueDataLoading from 'vue-data-loading'
+  import UserChips from './helpers/UserChips'
   import { mapGetters, mapActions } from 'vuex'
   export default {
     components: {
-      userChips,
-      vueDataLoading
+      'user-chips': UserChips,
+      'vue-data-loading': VueDataLoading
     },
     data () {
       return {

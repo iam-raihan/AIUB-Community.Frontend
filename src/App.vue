@@ -1,15 +1,12 @@
 <template>
   <div>
     <v-app toolbar v-if="fontsLoaded">
-      <navbar></navbar>
+      <my-navbar></my-navbar>
       <main>
         <v-content>
           <transition name="slide-fade"  mode="out-in">
             <router-view></router-view>
           </transition>
-          <download class="pa-0"></download>
-          <signIn class="pa-0"></signIn>
-          <signUp class="pa-0"></signUp>
         </v-content>
       </main>    
       <v-footer class="footer pa-2">
@@ -21,16 +18,10 @@
 </template>
 
 <script>
-  import navbar from '@/components/helpers/NavBar'
-  import download from '@/components/helpers/Download'
-  import signIn from '@/components/helpers/SignIn'
-  import signUp from '@/components/helpers/SignUp'
+  import NavBar from '@/components/helpers/NavBar'
   export default {
     components: {
-      navbar,
-      download,
-      signIn,
-      signUp
+      'my-navbar': NavBar
     },
     computed: {
       fontsLoaded () {

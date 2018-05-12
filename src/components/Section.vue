@@ -18,7 +18,7 @@
         </template>
 
         <template v-else>
-          <vueDataLoading
+          <vue-data-loading
             @pull-down="loadSectionData()"
             :loading="section.loading"
             :listens="['pull-down']"
@@ -46,14 +46,14 @@
               <v-card-text>
                 <center v-if="section.users.length === 0">No one saved this section yet</center>
                 <!-- @@@@@@@@@@@@@@@@ Loop for USERS _of_ Section @@@@@@@@@@@@@@@@ -->
-                <userChips
+                <user-chips
                   v-else
                   :sectionUsers="section.users"
                   :authUserPortalId="false">
-                </userChips>
+                </user-chips>
               </v-card-text>
             </v-card>
-          </vueDataLoading>
+          </vue-data-loading>
         </template>
       </v-flex>
     </v-layout>
@@ -61,12 +61,12 @@
 </template>
 
 <script>
-  import vueDataLoading from 'vue-data-loading'
-  import userChips from './helpers/UserChips'
+  import VueDataLoading from 'vue-data-loading'
+  import UserChips from './helpers/UserChips'
   export default {
     components: {
-      userChips,
-      vueDataLoading
+      'user-chips': UserChips,
+      'vue-data-loading': VueDataLoading
     },
     data () {
       return {

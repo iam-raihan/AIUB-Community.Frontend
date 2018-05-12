@@ -27,12 +27,7 @@ export const store = new Vuex.Store({
   state: {
     fontsLoaded: false,
     signOutClicked: false,
-    openDialogs: {
-      signIn: false,
-      signUp: false,
-      download: false,
-      lightBox: false
-    },
+    lightBoxOn: false,
     loadings: {
       axios: false,
       signingOut: false,
@@ -54,20 +49,8 @@ export const store = new Vuex.Store({
     setSignOutClicked (state, payload) {
       state.signOutClicked = payload
     },
-    setOpenDialogs (state, payload) {
-      switch (payload.dialog) {
-        case 'signIn':
-          state.openDialogs.signIn = payload.open
-          break
-        case 'signUp':
-          state.openDialogs.signUp = payload.open
-          break
-        case 'download':
-          state.openDialogs.download = payload.open
-          break
-        case 'lightBox':
-          state.openDialogs.lightBox = payload.open
-      }
+    setLightBoxOn (state, payload) {
+      state.lightBoxOn = payload
     },
     setLoadings (state, payload) {
       switch (payload.item) {
@@ -190,8 +173,8 @@ export const store = new Vuex.Store({
         }
       )
     },
-    openDialogs ({commit}, payload) {
-      commit('setOpenDialogs', payload)
+    lightBoxOn ({commit}, payload) {
+      commit('setLightBoxOn', payload)
     },
     signIn ({commit}, payload) {
       commit('setLoadings', {'item': 'axios', 'value': true})
@@ -201,7 +184,6 @@ export const store = new Vuex.Store({
         (response) => {
           commit('setLoadings', {'item': 'axios', 'value': false})
           commit('setAuthUser', {'data': response.data, 'remember': payload.remember})
-          commit('setOpenDialogs', {'dialog': 'signIn', 'open': false})
           let sections = []
           response.data.user.sections.forEach(section => {
             sections.push({
@@ -245,7 +227,6 @@ export const store = new Vuex.Store({
     },
     setUnauthorized ({commit}) {
       commit('setAuthUser', false)
-      commit('setOpenDialogs', {'dialog': 'signIn', 'open': true})
     },
     changeSignInErrorMsgs ({commit}, payload) {
       commit('setSignInErrorMsgs', {'field': payload, 'value': true})
@@ -307,8 +288,8 @@ export const store = new Vuex.Store({
     getFontsLoaded (state) {
       return state.fontsLoaded
     },
-    getOpenDialogs (state) {
-      return state.openDialogs
+    getLightBoxOn (state) {
+      return state.lightBoxOn
     },
     getLoadings (state) {
       return state.loadings
